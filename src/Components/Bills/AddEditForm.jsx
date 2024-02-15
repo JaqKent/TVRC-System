@@ -8,7 +8,6 @@ const AddEditForm = (props) => {
   const [dueDate, setDueDate] = useState(new Date());
   const [clientId, setClientId] = useState('');
   const [name, setName] = useState('');
-  const [plan, setPlan] = useState('');
   const [price, setPrice] = useState(0);
   const [priceText, setPriceText] = useState('');
   const [month, setMonth] = useState(moment().add(10, 'd').format('L'));
@@ -19,7 +18,6 @@ const AddEditForm = (props) => {
     if (props.selectedClient) {
       setClientId(props.selectedClient._id);
       setName(props.name);
-      setPlan(props.plan);
       setPrice(props.selectedClient.price);
       setPriceText(props.selectedClient.priceText);
       setDueDate(props.selectedClient.dueDate);
@@ -59,12 +57,11 @@ const AddEditForm = (props) => {
     e.preventDefault();
 
     Axios.post(
-      `${process.env.REACT_APP_BACKEND_URL}/api/bills/create`,
+      `${process.env.REACT_APP_BACKEND_URL}/api/playerBills/create`,
       {
         dueDate,
         clientId,
         name,
-        plan,
         price,
         priceText,
         month,
@@ -96,7 +93,7 @@ const AddEditForm = (props) => {
         </Modal.Header>
         <Modal.Body>
           <Form.Group>
-            <Form.Label>Cliente</Form.Label>
+            <Form.Label>Nombre</Form.Label>
             <Form.Control
               as='select'
               required
@@ -105,9 +102,9 @@ const AddEditForm = (props) => {
               name='clientId'
             >
               <option value=''>Seleccione un cliente...</option>
-              {props.clientList.map((client) => (
-                <option key={client._id} value={client._id}>
-                  {client.name}
+              {props.clientList.map((players) => (
+                <option key={players._id} value={players._id}>
+                  {players.name}
                 </option>
               ))}
             </Form.Control>

@@ -9,7 +9,7 @@ const DeleteConfirmation = (props) => {
 
   const deleteClient = () => {
     Axios.delete(
-      `${process.env.REACT_APP_BACKEND_URL}/api/clients/delete/${props.id}`,
+      `${process.env.REACT_APP_BACKEND_URL}/api/players/delete/${props.id}`,
       {
         headers: { 'auth-token': localStorage.getItem('token') },
       }

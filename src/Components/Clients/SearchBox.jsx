@@ -26,7 +26,7 @@ const SearchBox = (props) => {
     // La lógica de búsqueda aquí
     if (searchData.name.length >= 3 || searchData.name.length === 0) {
       Axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/api/clients/search`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/players/search`,
         searchData,
         {
           headers: { 'auth-token': localStorage.getItem('token') },
@@ -44,7 +44,7 @@ const SearchBox = (props) => {
   const onSubmit = (e) => {
     e.preventDefault();
     Axios.post(
-      `${process.env.REACT_APP_BACKEND_URL}/api/clients/search`,
+      `${process.env.REACT_APP_BACKEND_URL}/api/players/search`,
       searchData,
       {
         headers: { 'auth-token': localStorage.getItem('token') },

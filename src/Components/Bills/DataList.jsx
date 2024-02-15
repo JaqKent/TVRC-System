@@ -18,7 +18,7 @@ const DataList = (props) => {
     };
 
     Axios.delete(
-      `${process.env.REACT_APP_BACKEND_URL}/api/bills/deleteBill/${deleteModalId}`,
+      `${process.env.REACT_APP_BACKEND_URL}/api/playerBills/deleteBill/${deleteModalId}`,
       HEADERSCONFIG
     )
       .then(({ data }) => {
@@ -86,7 +86,7 @@ const DataList = (props) => {
             <Row>
               <Col>Nombre</Col>
               <Col className='text-center'>Fecha</Col>
-              <Col className='text-center'>Plan</Col>
+
               <Col className='text-right'>Monto</Col>
               <Col md={2} className='text-right'>
                 Vence
@@ -109,7 +109,7 @@ const DataList = (props) => {
                   <Col className='text-center'>
                     {moment(i.createdAt).format('L')}
                   </Col>
-                  <Col className='text-center'>{client && client.plan}</Col>
+
                   <Col className='text-right'>${i.price}</Col>
                   <Col md={2} className='text-right'>
                     {moment(i.dueDate).fromNow()}

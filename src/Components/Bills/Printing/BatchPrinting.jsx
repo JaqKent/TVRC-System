@@ -42,7 +42,7 @@ function BatchPrinting() {
 
       try {
         const out = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/api/clients/get`,
+          `${process.env.REACT_APP_BACKEND_URL}/api/players/get`,
           HEADERSCONFIG
         );
 
@@ -53,9 +53,9 @@ function BatchPrinting() {
           for (let i = 0; i < out.data.length; i += chunk) {
             const temparray = out.data.slice(i, i + chunk);
 
-            for (const client of temparray) {
-              if (client.unSubscribingDate) {
-                console.log(`Cliente ${client.name} dado de baja`);
+            for (const players of temparray) {
+              if (players.unSubscribingDate) {
+                console.log(`Cliente ${players.name} dado de baja`);
                 continue;
               }
 
@@ -110,11 +110,11 @@ function BatchPrinting() {
 
               doc.setTextColor(0, 0, 0);
               doc.setFontSize(12);
-              doc.text('Cliente:', 5, 80);
+              doc.text('Nombre:', 5, 80);
 
               doc.setTextColor(0, 0, 0);
               doc.setFontSize(10);
-              doc.text(`${client.name}`, 75, 80);
+              doc.text(`${players.name}`, 75, 80);
 
               doc.setTextColor(0, 0, 0);
               doc.setFontSize(12);
@@ -122,7 +122,7 @@ function BatchPrinting() {
 
               doc.setTextColor(0, 0, 0);
               doc.setFontSize(10);
-              doc.text(`Pesos ${client.priceText}`, 75, 100);
+              doc.text(`Pesos ${players.priceText}`, 75, 100);
 
               doc.setTextColor(0, 0, 0);
               doc.setFontSize(12);
@@ -144,73 +144,38 @@ function BatchPrinting() {
 
               doc.setTextColor(0, 0, 0);
               doc.setFontSize(10);
-              doc.text(`$ ${client.price}-.`, 127, 210);
+              doc.text(`$ ${players.price}-.`, 127, 210);
 
               doc.setTextColor(0, 0, 0);
               doc.setFontSize(10);
-              doc.text(
-                'Rebanking (Transatlantica Compañía Financiera S.A.)',
-                5,
-                140
-              );
+              doc.text('Efectivo (por tesoreria)', 5, 140);
 
               doc.setTextColor(0, 0, 0);
               doc.setFontSize(10);
-              doc.text('Número de cuenta ($): 999-180087/2', 5, 150);
+              doc.text('Trasnferencia (Banco Nación)', 5, 140);
 
               doc.setTextColor(0, 0, 0);
               doc.setFontSize(10);
-              doc.text('CBU: 4150999718001800870027', 5, 160);
+              doc.text('CBU: 0110510030051019254879', 5, 160);
 
               doc.setTextColor(0, 0, 0);
               doc.setFontSize(10);
-              doc.text('Alias: jma.iramain.ars', 5, 170);
+              doc.text('Alias: verdeamarella2024', 5, 170);
 
               doc.setTextColor(0, 0, 0);
               doc.setFontSize(10);
-              doc.text(
-                'Titular de la cuenta: Jose Manuel Adrian Iramain',
-                5,
-                180
-              );
-
-              doc.setTextColor(0, 0, 0);
-              doc.setFontSize(10);
-              doc.text('CUIT: 20254442780', 5, 190);
+              doc.text('Titular de la cuenta: Fabio Sosa', 5, 180);
 
               doc.setTextColor(255, 0, 0);
               doc.setFontSize(10);
               doc.text(
-                'LOS ABONOS PUEDEN SER PAGADOS EN EFECTIVO EN PAGO FACIL ',
-                5,
-                225
-              );
-
-              doc.setTextColor(255, 0, 0);
-              doc.setFontSize(10);
-              doc.text(
-                'pedís ingresar dinero en REBA, luego brindás el CUIL: 20254442780, sexo: masculino, DNI 25444278,',
-                5,
-                230
-              );
-              doc.setTextColor(255, 0, 0);
-              doc.setFontSize(10);
-              doc.text(
-                'y el monto que vas a  ingresar como pago. Una vez realizo enviar foto del comprobante.',
-                5,
-                235
-              );
-
-              doc.setTextColor(255, 0, 0);
-              doc.setFontSize(10);
-              doc.text(
-                'Enviar comprobante de pago por email: info.wifi.net@gmail.com o por WhatsApp:3815285322',
+                'Enviar comprobante de pago:WhatsApp:3816783493',
                 5,
                 240
               );
 
-              doc.save(`cliente-${client.name}.pdf`);
-              console.log('Cliente');
+              doc.save(`Nombre-${players.name}.pdf`);
+              console.log('Nombre');
 
               await new Promise((resolve) => setTimeout(resolve, 1000));
             }

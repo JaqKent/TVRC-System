@@ -23,10 +23,11 @@ const ListClientsBaja = () => {
   const [activeClients, setActiveClients] = useState(0);
   const [addClientsModalShow, setAddClientsModalShow] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [filteredClients, setFilteredClients] = useState([]);
   const navigate = useNavigate();
 
   const getData = useCallback(() => {
-    Axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/clients/get`, {
+    Axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/players/get`, {
       headers: { 'auth-token': localStorage.getItem('token') },
     })
       .then(({ data }) => {
@@ -52,10 +53,10 @@ const ListClientsBaja = () => {
   };
 
   const performFilter = useCallback(() => {
-    const filteredClients = clientListCopy.filter(
+    const filtered = clientListCopy.filter(
       (client) => client.unSubscribingDate !== null
     );
-    setClientListCopy(filteredClients);
+    setFilteredClients(filtered);
   }, [clientListCopy]);
 
   useEffect(() => {
@@ -82,7 +83,7 @@ const ListClientsBaja = () => {
 
         {/* Caja de búsqueda */}
         <h5 className='m-0 p-1 text-success'>
-          <i> (Clientes Dados de Baja: {activeClients})</i>
+          <i> (Jugadores Dados de Baja: {activeClients})</i>
         </h5>
 
         <Row>
@@ -94,7 +95,7 @@ const ListClientsBaja = () => {
           </Col>
         </Row>
         <p className='m-1 p-1 bg-light text-success text-center'>
-          Agregar Cliente
+          Agregar Jugador
           <FontAwesomeIcon
             className='ml-2 text-info'
             style={{ cursor: 'pointer' }}
@@ -107,17 +108,17 @@ const ListClientsBaja = () => {
         <Row>
           <Col className='p-3 my-3 bg-light rounded shadow'>
             <Row className='px-3 mb-3'>
-              <Col>
+              <Col md={4}>
                 <p className='m-0 p-0'>Nombre y Apellido</p>
               </Col>
-              <Col>
-                <p className='m-0 p-0 text-left'>Dirección</p>
+              <Col md={2}>
+                <p className='m-0 p-0 text-left'>DNI</p>
               </Col>
               <Col md={2}>
-                <p className='m-0 p-0 text-right'>Plan</p>
+                <p className='m-0 p-0 text-center'>Categoria</p>
               </Col>
-              <Col md={1}>
-                <p className='m-0 p-0 text-right'>Precio</p>
+              <Col md={2}>
+                <p className='m-0 p-0 text-right'>Cuota</p>
               </Col>
             </Row>
             <ListGroup>
@@ -131,18 +132,18 @@ const ListClientsBaja = () => {
                     className={client.unSubscribingDate ? 'text-danger' : null}
                   >
                     <Row>
-                      <Col>
+                      <Col md={4}>
                         <p className='m-0 p-0'>{`${client.name} ${
                           client.unSubscribingDate ? ' (dado de baja)' : ''
                         }`}</p>
                       </Col>
-                      <Col>
-                        <p className='m-0 p-0'>{`${client.address} `}</p>
+                      <Col md={2}>
+                        <p className='m-0 p-0'>{client.dni}</p>
                       </Col>
                       <Col md={2}>
-                        <p className='m-0 p-0 text-right'>{client.plan}</p>
+                        <p className='m-0 p-0 text-right'>{client.category}</p>
                       </Col>
-                      <Col md={1}>
+                      <Col md={2}>
                         <p className='m-0 p-0 text-right'>${client.price}</p>
                       </Col>
                     </Row>

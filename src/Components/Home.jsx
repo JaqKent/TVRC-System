@@ -11,7 +11,7 @@ function Home() {
     const TOKEN = localStorage.getItem('token');
 
     if (TOKEN) {
-      navigate('/clients/list-baja');
+      navigate('/clients/list');
     } else {
       localStorage.removeItem('token');
       navigate('/');

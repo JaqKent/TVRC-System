@@ -55,7 +55,7 @@ const PhysicalBill = () => {
           setState((prev) => ({ ...prev, data: billResponse.data.data[0] }));
 
           const clientResponse = await Axios.get(
-            `${process.env.REACT_APP_BACKEND_URL}/api/clients/get/${billResponse.data.data[0].clientId}`,
+            `${process.env.REACT_APP_BACKEND_URL}/api/players/get/${billResponse.data.data[0].clientId}`,
             HEADERSCONFIG
           );
 

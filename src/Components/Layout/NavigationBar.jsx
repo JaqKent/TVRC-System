@@ -39,17 +39,17 @@ const NavigationBar = () => {
   return (
     <Navbar bg='primary' variant='dark' expand='lg'>
       <Link className='text-xl' to='/clients/list'>
-        <Navbar.Brand>Wi-Fi Net Client Manager</Navbar.Brand>
+        <Navbar.Brand>Tafi Viejo Rugby Club</Navbar.Brand>
       </Link>
       <Navbar.Toggle aria-controls='basic-navbar-nav' />
       <Navbar.Collapse id='basic-navbar-nav'>
         <Nav className='mr-auto'>
           <Nav.Item>
-            <Nav.Link href='/clients/list'>Clientes Activos</Nav.Link>
+            <Nav.Link href='/'>Jugadores Activos</Nav.Link>
           </Nav.Item>
-          <Link to='/'>
+          <Link to='/clients/list-baja'>
             <Navbar.Brand className='client-manager-logo'>
-              Clientes Dados de Baja
+              Jugadores Dados de Baja
             </Navbar.Brand>
           </Link>
           <Nav.Item>

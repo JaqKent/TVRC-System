@@ -28,13 +28,14 @@ const ListClients = () => {
   }, []);
 
   const getData = () => {
-    Axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/clients/get`, {
+    Axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/players/get`, {
       headers: { 'auth-token': localStorage.getItem('token') },
     })
       .then(({ data }) => {
         data = data.filter((element) => element.unSubscribingDate === null);
         data = data.sort((a, b) => a.name.localeCompare(b.name));
         setFullClientsList(data);
+        setAfterPaginationClientsList(data);
         setActiveClients(
           data.filter((i) => !Boolean(i.unSubscribingDate)).length
         );
@@ -83,7 +84,7 @@ const ListClients = () => {
           </Col>
         </Row>
         <p className='m-1 p-1 bg-light text-success text-center'>
-          Agregar Cliente
+          Agregar Jugador
           <FontAwesomeIcon
             className='ml-2 text-info'
             style={{ cursor: 'pointer' }}
@@ -96,17 +97,17 @@ const ListClients = () => {
         <Row>
           <Col className='p-3 my-3 bg-light rounded shadow'>
             <Row className='px-3 mb-3'>
-              <Col>
+              <Col md={4}>
                 <p className='m-0 p-0'>Nombre y Apellido</p>
               </Col>
-              <Col>
-                <p className='m-0 p-0 text-left'>Dirección</p>
+              <Col md={2}>
+                <p className='m-0 p-0 text-left'>DNI</p>
               </Col>
               <Col md={2}>
-                <p className='m-0 p-0 text-right'>Plan</p>
+                <p className='m-0 p-0 text-center'>Categoria</p>
               </Col>
-              <Col md={1}>
-                <p className='m-0 p-0 text-right'>Precio</p>
+              <Col md={2}>
+                <p className='m-0 p-0 text-right'>Cuota</p>
               </Col>
             </Row>
             <ListGroup>
@@ -120,18 +121,18 @@ const ListClients = () => {
                     className={i.unSubscribingDate ? 'text-danger' : null}
                   >
                     <Row>
-                      <Col>
+                      <Col md={4}>
                         <p className='m-0 p-0'>{`${i.name} ${
                           i.unSubscribingDate ? ' (dado de baja)' : ''
                         }`}</p>
                       </Col>
-                      <Col>
-                        <p className='m-0 p-0'>{`${i.address} `}</p>
+                      <Col md={2}>
+                        <p className='m-0 p-0'>{i.dni}</p>
                       </Col>
                       <Col md={2}>
-                        <p className='m-0 p-0 text-right'>{i.plan}</p>
+                        <p className='m-0 p-0 text-right'>{i.category}</p>
                       </Col>
-                      <Col md={1}>
+                      <Col md={2}>
                         <p className='m-0 p-0 text-right'>${i.price}</p>
                       </Col>
                     </Row>

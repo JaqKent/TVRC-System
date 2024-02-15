@@ -7,17 +7,21 @@ import { notify } from 'react-notify-toast';
 const AddClients = (props) => {
   const [clientData, setClientData] = useState({
     name: '',
+    category: '',
     address: '',
     dni: '',
+    birthday: '',
+    nickName: '',
     inscriptionDate: '',
-    plan: '',
     price: '',
     priceText: '',
-    priceInstall: '',
     phone: '',
     phoneAlt: '',
     email: '',
-    ipAddress: '',
+    obraSocial: '',
+    bloodType: '',
+    tshirtSize: '',
+    shortSize: '',
     unSubscribingDate: '',
     unSubscribingReason: '',
     isDown: false,
@@ -46,7 +50,7 @@ const AddClients = (props) => {
 
     if (props.isEdit) {
       Axios.put(
-        `${process.env.REACT_APP_BACKEND_URL}/api/clients/edit/${props.clientToEdit._id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/players/edit/${props.clientToEdit._id}`,
         clientData,
         {
           headers: { 'auth-token': localStorage.getItem('token') },
@@ -56,7 +60,7 @@ const AddClients = (props) => {
         .catch((error) => handleError(error));
     } else {
       Axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}/api/clients/create`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/players/create`,
         clientData,
         {
           headers: { 'auth-token': localStorage.getItem('token') },
@@ -93,17 +97,21 @@ const AddClients = (props) => {
   const clearInputs = () => {
     setClientData({
       name: '',
+      category: '',
       address: '',
       dni: '',
+      birthday: '',
+      nickName: '',
       inscriptionDate: '',
-      plan: '',
       price: '',
       priceText: '',
-      priceInstall: '',
       phone: '',
       phoneAlt: '',
       email: '',
-      ipAddress: '',
+      obraSocial: '',
+      bloodType: '',
+      tshirtSize: '',
+      shortSize: '',
       unSubscribingDate: '',
       unSubscribingReason: '',
       isDown: false,
@@ -118,164 +126,188 @@ const AddClients = (props) => {
       <Form className='px-3' onSubmit={handleSubmit}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {props.isEdit ? 'Modificar un Cliente.' : 'Agregar un Cliente'}
+            {props.isEdit ? 'Modificar un Jugador.' : 'Agregar un Jugador'}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Group>
-            <Form.Label>Nombre {requiredStar}</Form.Label>
-            <Form.Control
-              value={clientData.name}
-              onChange={handleChange}
-              type='text'
-              name='name'
-              required
-            />
-          </Form.Group>
+          <div className='row'>
+            <div className='col-md-6'>
+              <Form.Group>
+                <Form.Label>Nombre {requiredStar}</Form.Label>
+                <Form.Control
+                  value={clientData.name}
+                  onChange={handleChange}
+                  type='text'
+                  name='name'
+                  required
+                />
+              </Form.Group>
 
-          <Form.Group>
-            <Form.Label>Domicilio {requiredStar}</Form.Label>
-            <Form.Control
-              value={clientData.address}
-              onChange={handleChange}
-              type='text'
-              name='address'
-              required
-            />
-          </Form.Group>
+              <Form.Group>
+                <Form.Label>DNI {requiredStar}</Form.Label>
+                <Form.Control
+                  value={clientData.dni}
+                  onChange={handleChange}
+                  type='text'
+                  name='dni'
+                />
+              </Form.Group>
 
-          <Form.Group>
-            <Form.Label>DNI {requiredStar}</Form.Label>
-            <Form.Control
-              value={clientData.dni}
-              onChange={handleChange}
-              type='text'
-              name='dni'
-              required
-            />
-          </Form.Group>
+              <Form.Group>
+                <Form.Label>Domicilio {requiredStar}</Form.Label>
+                <Form.Control
+                  value={clientData.address}
+                  onChange={handleChange}
+                  type='text'
+                  name='address'
+                />
+              </Form.Group>
 
-          <Form.Group>
-            <Form.Label>Fecha de alta {requiredStar}</Form.Label>
-            <Form.Control
-              value={clientData.inscriptionDate}
-              onChange={handleChange}
-              type='date'
-              name='inscriptionDate'
-              required
-            />
-          </Form.Group>
+              <Form.Group>
+                <Form.Label>Categoria</Form.Label>
+                <Form.Control
+                  value={clientData.category}
+                  onChange={handleChange}
+                  type='text'
+                  name='category'
+                  required
+                />
+              </Form.Group>
 
-          <Form.Group>
-            <Form.Label>Plan {requiredStar}</Form.Label>
-            <Form.Control
-              value={clientData.plan}
-              onChange={handleChange}
-              as='select'
-              name='plan'
-              required
-            >
-              <option value=''>Seleccione una opción</option>
-              <option>3MB</option>
-              <option>5MB</option>
-              <option>10MB</option>
-              <option>15MB</option>
-              <option>20MB</option>
-              <option>30MB</option>
-              <option>50MB</option>
-              <option>80MB</option>
-              <option>100MB</option>
-              <option>150MB</option>
-              <option>200MB</option>
-              <option>250MB</option>
-              <option>300MB</option>
-              <option>350MB</option>
-              <option>400MB</option>
-            </Form.Control>
-          </Form.Group>
+              <Form.Group>
+                <Form.Label>Apodo</Form.Label>
+                <Form.Control
+                  value={clientData.nickName}
+                  onChange={handleChange}
+                  type='text'
+                  name='nickName'
+                />
+              </Form.Group>
 
-          <Form.Group>
-            <Form.Label>Precio {requiredStar}</Form.Label>
-            <Form.Control
-              value={clientData.price}
-              onChange={handleChange}
-              type='number'
-              name='price'
-              required
-            />
-          </Form.Group>
+              <Form.Group>
+                <Form.Label>Fecha de Inscripcion {requiredStar}</Form.Label>
+                <Form.Control
+                  value={clientData.inscriptionDate}
+                  onChange={handleChange}
+                  type='date'
+                  name='inscriptionDate'
+                  required
+                />
+              </Form.Group>
 
-          <Form.Group>
-            <Form.Label>Precio (Expresado en letras) {requiredStar}</Form.Label>
-            <Form.Control
-              value={clientData.priceText}
-              onChange={handleChange}
-              type='text'
-              name='priceText'
-              required
-            />
-          </Form.Group>
+              <Form.Group>
+                <Form.Label> Precio de Cuota {requiredStar}</Form.Label>
+                <Form.Control
+                  value={clientData.price}
+                  onChange={handleChange}
+                  type='number'
+                  name='price'
+                />
+              </Form.Group>
 
-          <Form.Group>
-            <Form.Label>Precio de instalación</Form.Label>
-            <Form.Control
-              value={clientData.priceInstall}
-              onChange={handleChange}
-              type='text'
-              name='priceInstall'
-            />
-          </Form.Group>
+              <Form.Group>
+                <Form.Label>Precio de Cuota(Expresado en letras)</Form.Label>
+                <Form.Control
+                  value={clientData.priceText}
+                  onChange={handleChange}
+                  type='text'
+                  name='priceText'
+                />
+              </Form.Group>
+            </div>
+            <div className='col-md-6'>
+              <Form.Group>
+                <Form.Label>Fecha de Nacimiento {requiredStar}</Form.Label>
+                <Form.Control
+                  value={clientData.birthday}
+                  onChange={handleChange}
+                  type='date'
+                  name='birthday'
+                ></Form.Control>
+              </Form.Group>
 
-          <Form.Group>
-            <Form.Label>Teléfono {requiredStar}</Form.Label>
-            <Form.Control
-              value={clientData.phone}
-              onChange={handleChange}
-              type='text'
-              name='phone'
-              required
-            />
-          </Form.Group>
+              <Form.Group>
+                <Form.Label>Teléfono</Form.Label>
+                <Form.Control
+                  value={clientData.phone}
+                  onChange={handleChange}
+                  type='text'
+                  name='phone'
+                />
+              </Form.Group>
 
-          <Form.Group>
-            <Form.Label>Teléfono (Alternativo)</Form.Label>
-            <Form.Control
-              value={clientData.phoneAlt}
-              onChange={handleChange}
-              type='text'
-              name='phoneAlt'
-            />
-          </Form.Group>
+              <Form.Group>
+                <Form.Label>Teléfono (Alternativo)</Form.Label>
+                <Form.Control
+                  value={clientData.phoneAlt}
+                  onChange={handleChange}
+                  type='text'
+                  name='phoneAlt'
+                />
+              </Form.Group>
 
-          <Form.Group>
-            <Form.Label>Email</Form.Label>
-            <Form.Control
-              value={clientData.email}
-              onChange={handleChange}
-              type='email'
-              name='email'
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Dirección IP</Form.Label>
-            <Form.Control
-              value={clientData.ipAddress}
-              onChange={handleChange}
-              type='text'
-              name='ipAddress'
-            />
-          </Form.Group>
+              <Form.Group>
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  value={clientData.email}
+                  onChange={handleChange}
+                  type='email'
+                  name='email'
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Obra Social</Form.Label>
+                <Form.Control
+                  value={clientData.obraSocial}
+                  onChange={handleChange}
+                  type='text'
+                  name='obraSocial'
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Grupo Sanguineo</Form.Label>
+                <Form.Control
+                  value={clientData.bloodType}
+                  onChange={handleChange}
+                  type='text'
+                  name='bloodType'
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Talle Camiseta</Form.Label>
+                <Form.Control
+                  value={clientData.tshirtSize}
+                  onChange={handleChange}
+                  type='text'
+                  name='tshirtSize'
+                />
+              </Form.Group>
 
-          <Form.Group>
-            <Form.Check
-              checked={clientData.isDown}
-              onChange={() => {
-                setClientData({ ...clientData, isDown: !clientData.isDown });
-              }}
-              type='checkbox'
-              label='¿Dado de baja?'
-            />
-          </Form.Group>
+              <Form.Group>
+                <Form.Label>Talle Pantalon</Form.Label>
+                <Form.Control
+                  value={clientData.shortSize}
+                  onChange={handleChange}
+                  type='text'
+                  name='shortSize'
+                />
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Check
+                  checked={clientData.isDown}
+                  onChange={() => {
+                    setClientData({
+                      ...clientData,
+                      isDown: !clientData.isDown,
+                    });
+                  }}
+                  type='checkbox'
+                  label='¿Dado de baja?'
+                />
+              </Form.Group>
+            </div>
+          </div>
 
           <div className={clientData.isDown ? 'd-block' : 'd-none'}>
             <Form.Group>

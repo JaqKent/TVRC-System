@@ -6,7 +6,7 @@ const AskForPrint = (props) => {
   const navigate = useNavigate();
 
   const print = () => {
-    navigate(`/bills/print/${props.id}`);
+    navigate(`/playerBills/print/${props.id}`);
     props.onHide();
   };
 

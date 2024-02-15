@@ -37,11 +37,11 @@ const BillScreen = (props) => {
       headers: { 'auth-token': localStorage.getItem('token') },
     };
     const GETBILLS = Axios.get(
-      `${process.env.REACT_APP_BACKEND_URL}/api/bills/get`,
+      `${process.env.REACT_APP_BACKEND_URL}/api/playerBills/get`,
       HEADERSCONFIG
     );
     const GETCLIENTS = Axios.get(
-      `${process.env.REACT_APP_BACKEND_URL}/api/clients/get`,
+      `${process.env.REACT_APP_BACKEND_URL}/api/players/get`,
       HEADERSCONFIG
     );
 

@@ -34,14 +34,14 @@ const DetailClients = (props) => {
 
   const getClientInfo = () => {
     const singleClient = Axios.get(
-      `${process.env.REACT_APP_BACKEND_URL}/api/clients/get/${id}`,
+      `${process.env.REACT_APP_BACKEND_URL}/api/players/get/${id}`,
       {
         headers: { 'auth-token': localStorage.getItem('token') },
       }
     );
 
     const allClients = Axios.get(
-      `${process.env.REACT_APP_BACKEND_URL}/api/clients/get/`,
+      `${process.env.REACT_APP_BACKEND_URL}/api/players/get/`,
       {
         headers: { 'auth-token': localStorage.getItem('token') },
       }
@@ -108,7 +108,7 @@ const DetailClients = (props) => {
           <h1 className='display-4 display-5'>{data.name}</h1>
           <small className='text-danger'>
             <strong>
-              {data.unSubscribingDate ? 'Cliente dado de baja' : ''}
+              {data.unSubscribingDate ? 'Jugador dado de baja' : ''}
             </strong>
           </small>
         </Col>
@@ -150,6 +150,10 @@ const DetailClients = (props) => {
           </small>
           <ul className='mt-3'>
             <li>
+              <span className='text-muted'>F. de Nacimiento:</span>{' '}
+              {data.birthday ? moment(data.birthday).format('L') : ''}
+            </li>
+            <li>
               <span className='text-muted'>Dirección:</span> {data.address}
             </li>
             <li>
@@ -157,7 +161,7 @@ const DetailClients = (props) => {
               {data.phoneAlt ? data.phoneAlt : ''}
             </li>
             <li>
-              <span className='text-muted'>E-mail:</span> {data.email}
+              <span className='text-muted'>Categoria:</span> {data.category}
             </li>
             <li>
               <span className='text-muted'>DNI:</span> {data.dni}
@@ -173,18 +177,27 @@ const DetailClients = (props) => {
               <span className='text-muted'>Fecha de alta:</span>{' '}
               {moment(data.inscriptionDate).format('L')}
             </li>
-            <li>
-              <span className='text-muted'>Plan:</span> {data.plan}
-            </li>
+
             <li>
               <span className='text-muted'>Precio:</span> ${data.price}
             </li>
             <li>
-              <span className='text-muted'>Precio de instalación:</span> $
-              {data.priceInstall}
+              <span className='text-muted'>Obra Social:</span> {data.obraSocial}
             </li>
             <li>
-              <span className='text-muted'>Dirección IP:</span> {data.ipAddress}
+              <span className='text-muted'>Grupo Sanguineo:</span>{' '}
+              {data.bloodType}
+            </li>
+            <li>
+              <span className='text-muted'>Talle Camiseta:</span>
+              {data.tshirtSize}
+            </li>
+            <li>
+              <span className='text-muted'>Talle Pantalón:</span>{' '}
+              {data.shortSize}
+            </li>
+            <li>
+              <span className='text-muted'>Apodo:</span> {data.nickName}
             </li>
           </ul>
 

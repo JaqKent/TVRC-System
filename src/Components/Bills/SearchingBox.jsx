@@ -18,7 +18,7 @@ const SearchingBox = (props) => {
     e.preventDefault();
 
     Axios.post(
-      `${process.env.REACT_APP_BACKEND_URL}/api/bills/search`,
+      `${process.env.REACT_APP_BACKEND_URL}/api/playersBills/search`,
       { dateFrom, dateTo },
       {
         headers: { 'auth-token': localStorage.getItem('token') },
