@@ -78,7 +78,7 @@ const DataList = (props) => {
                 className='w-100'
                 onClick={() => navigate('/bills/printAll')}
               >
-                Imprimir boletas para todos los clientes
+                Imprimir todas las boletas
               </Button>
             </Col>
           </Row>
@@ -95,8 +95,8 @@ const DataList = (props) => {
             </Row>
           </ListGroup.Item>
           {props.data.map((i) => {
-            const client = props.clientList.filter(
-              (cl) => cl._id === i.clientId
+            const player = props.clientList.filter(
+              (cl) => cl._id === i.playerId
             )[0];
 
             return (
@@ -105,7 +105,7 @@ const DataList = (props) => {
                 variant={i.partial ? 'info' : 'light'}
               >
                 <Row>
-                  <Col className='text-truncate'>{client && client.name}</Col>
+                  <Col className='text-truncate'>{player && player.name}</Col>
                   <Col className='text-center'>
                     {moment(i.createdAt).format('L')}
                   </Col>

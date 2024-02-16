@@ -6,7 +6,7 @@ import { notify } from 'react-notify-toast';
 
 const AddEditForm = (props) => {
   const [dueDate, setDueDate] = useState(new Date());
-  const [clientId, setClientId] = useState('');
+  const [playerId, setPlayerId] = useState('');
   const [name, setName] = useState('');
   const [price, setPrice] = useState(0);
   const [priceText, setPriceText] = useState('');
@@ -16,8 +16,8 @@ const AddEditForm = (props) => {
 
   useEffect(() => {
     if (props.selectedClient) {
-      setClientId(props.selectedClient._id);
-      setName(props.name);
+      setPlayerId(props.selectedClient._id);
+      setName(props.selectedClient.name);
       setPrice(props.selectedClient.price);
       setPriceText(props.selectedClient.priceText);
       setDueDate(props.selectedClient.dueDate);
@@ -25,10 +25,10 @@ const AddEditForm = (props) => {
   }, [props]);
 
   const handleChange = (e) => {
-    let { name, value } = e.target;
+    const { name, value } = e.target;
     switch (name) {
-      case 'clientId':
-        setClientId(value);
+      case 'playerId':
+        setPlayerId(value);
         break;
       case 'partial':
         setPartial(!partial);
@@ -53,37 +53,36 @@ const AddEditForm = (props) => {
     }
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
-    Axios.post(
-      `${process.env.REACT_APP_BACKEND_URL}/api/playerBills/create`,
-      {
-        dueDate,
-        clientId,
-        name,
-        price,
-        priceText,
-        month,
-        additionalNotes,
-        partial,
-      },
-      { headers: { 'auth-token': localStorage.getItem('token') } }
-    )
-      .then((res) => {
-        if (res.data.success) {
-          notify.show(res.data.message, 'success');
-          props.refresh();
-          props.askToPrint(res.data.id);
-          props.onHide();
-        } else {
-          notify.show(res.data.message, 'error');
-        }
-      })
-      .catch((err) => notify.show(err.message, 'error'));
+    try {
+      const response = await Axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/playerBills/create`,
+        {
+          dueDate,
+          playerId,
+          name,
+          price,
+          priceText,
+          month,
+          additionalNotes,
+          partial,
+        },
+        { headers: { 'auth-token': localStorage.getItem('token') } }
+      );
+      if (response.data.success) {
+        notify.show(response.data.message, 'success');
+        props.refresh();
+        props.askToPrint(response.data.id);
+        props.onHide();
+      } else {
+        notify.show(response.data.message, 'error');
+      }
+    } catch (error) {
+      notify.show(error.message, 'error');
+    }
   };
-
-  let req = <small className='text-danger font-weight-bold'>*</small>;
 
   return (
     <Modal show={props.show} onHide={props.onHide}>
@@ -97,14 +96,14 @@ const AddEditForm = (props) => {
             <Form.Control
               as='select'
               required
-              value={clientId}
+              value={playerId}
               onChange={handleChange}
-              name='clientId'
+              name='playerId'
             >
-              <option value=''>Seleccione un cliente...</option>
-              {props.clientList.map((players) => (
-                <option key={players._id} value={players._id}>
-                  {players.name}
+              <option value=''>Seleccione un jugador...</option>
+              {props.clientList.map((player) => (
+                <option key={player._id} value={player._id}>
+                  {player.name}
                 </option>
               ))}
             </Form.Control>
@@ -121,7 +120,7 @@ const AddEditForm = (props) => {
           </Form.Group>
 
           <Form.Group>
-            <Form.Label>Fecha de vencimiento{req}</Form.Label>
+            <Form.Label>Fecha de vencimiento</Form.Label>
             <Form.Control
               required
               type='date'
@@ -132,7 +131,7 @@ const AddEditForm = (props) => {
           </Form.Group>
 
           <Form.Group>
-            <Form.Label>Precio{req}</Form.Label>
+            <Form.Label>Precio</Form.Label>
             <Form.Control
               required
               type='number'
@@ -143,7 +142,7 @@ const AddEditForm = (props) => {
           </Form.Group>
 
           <Form.Group>
-            <Form.Label>Precio (expresado verbalmente){req}</Form.Label>
+            <Form.Label>Precio (expresado verbalmente)</Form.Label>
             <Form.Control
               required
               type='text'
@@ -154,7 +153,7 @@ const AddEditForm = (props) => {
           </Form.Group>
 
           <Form.Group>
-            <Form.Label>Mes a cobrar{req}</Form.Label>
+            <Form.Label>Mes a cobrar</Form.Label>
             <Form.Control
               required
               type='month'

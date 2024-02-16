@@ -152,7 +152,7 @@ function BatchPrinting() {
 
               doc.setTextColor(0, 0, 0);
               doc.setFontSize(10);
-              doc.text('Trasnferencia (Banco Nación)', 5, 140);
+              doc.text('Trasnferencia (Banco Nación)', 5, 150);
 
               doc.setTextColor(0, 0, 0);
               doc.setFontSize(10);
@@ -160,11 +160,11 @@ function BatchPrinting() {
 
               doc.setTextColor(0, 0, 0);
               doc.setFontSize(10);
-              doc.text('Alias: verdeamarella2024', 5, 170);
+              doc.text('Alias: VERDEAMARELLA2024', 5, 170);
 
               doc.setTextColor(0, 0, 0);
               doc.setFontSize(10);
-              doc.text('Titular de la cuenta: Fabio Sosa', 5, 180);
+              doc.text('Titular de la cuenta: Fabio Alejandro Sosa', 5, 180);
 
               doc.setTextColor(255, 0, 0);
               doc.setFontSize(10);

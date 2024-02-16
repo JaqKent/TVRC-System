@@ -8,6 +8,7 @@ import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import LoadingScreen from '../../Layout/LoadingScreen';
 import { useParams } from 'react-router-dom';
+import logo from '../../../assets/LOGO TVRC.png';
 
 const PhysicalBill = () => {
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ const PhysicalBill = () => {
         };
 
         const billResponse = await Axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/api/bills/get/${id}`,
+          `${process.env.REACT_APP_BACKEND_URL}/api/playerBills/get/${id}`,
           HEADERSCONFIG
         );
 
@@ -55,7 +56,7 @@ const PhysicalBill = () => {
           setState((prev) => ({ ...prev, data: billResponse.data.data[0] }));
 
           const clientResponse = await Axios.get(
-            `${process.env.REACT_APP_BACKEND_URL}/api/players/get/${billResponse.data.data[0].clientId}`,
+            `${process.env.REACT_APP_BACKEND_URL}/api/players/get/${billResponse.data.data[0].playerId}`,
             HEADERSCONFIG
           );
 
@@ -113,7 +114,7 @@ const PhysicalBill = () => {
         .then((group) => exportPDF(group))
         .then((dataUri) => {
           Axios.post(
-            `${process.env.REACT_APP_BACKEND_URL}/api/bills/send`,
+            `${process.env.REACT_APP_BACKEND_URL}/api/playerBills/send`,
             { ...POSTCONFIG, file: dataUri },
             { headers: { 'auth-token': localStorage.getItem('token') } }
           ).then((res) => {
@@ -202,11 +203,7 @@ const PhysicalBill = () => {
           >
             <Row>
               <Col md='4' className='border v-center text-center'>
-                <img
-                  src={process.env.PUBLIC_URL + '/img/wifinetLogoFull.webp'}
-                  height='150'
-                  alt='WiFi Net Logo'
-                />
+                <img src={logo} height='150' alt='WiFi Net Logo' />
               </Col>
               <Col>
                 <Row className='border v-center'>
@@ -234,7 +231,7 @@ const PhysicalBill = () => {
 
             <Row>
               <Col md='4' className='border v-center'>
-                <p className='lead m-0 py-2'>Cliente:</p>
+                <p className='lead m-0 py-2'>Socio:</p>
               </Col>
               <Col className='border v-center'>{`${clientData.name} - ${clientData.address}`}</Col>
             </Row>
@@ -248,7 +245,7 @@ const PhysicalBill = () => {
               <Col md='4' className='border v-center'>
                 <p className='lead m-0 py-2'>Como:</p>
               </Col>
-              <Col className='border v-center'>{`Abono del mes: ${moment(
+              <Col className='border v-center'>{`Mes: ${moment(
                 data.month
               ).format('MMMM YYYY')}`}</Col>
             </Row>
@@ -259,48 +256,38 @@ const PhysicalBill = () => {
                     <h1 className='bill-payment-title text-info'>
                       Métodos de pago
                     </h1>
+
                     <ul>
                       <li>
                         <h2 className='bill-payment-subtitle mt-3 text-uppercase'>
-                          CBU - REBA "Rebanking" (Transatlantica Compañía
-                          Financiera S.A.)
+                          Puede abonar en <strong> Efectivo </strong> por
+                          tesoreria.
+                        </h2>
+                      </li>
+                    </ul>
+                    <ul>
+                      <li>
+                        <h2 className='bill-payment-subtitle mt-3 text-uppercase'>
+                          Por Trasnferencia a Banco Nación
                         </h2>
                       </li>
 
                       <ul>
                         <li className='bill-payment-item'>
-                          N° de Cuenta: <strong>999-180087/2</strong>
+                          N° de CBU: <strong>0110510030051019254879</strong>
                         </li>
                         <li className='bill-payment-item'>
-                          N° de CBU: <strong>4150999718001800870027</strong>
+                          Alias: <strong>VERDEAMARELLA2024</strong>
                         </li>
                         <li className='bill-payment-item'>
-                          Alias: <strong>jma.iramain.ars</strong>
+                          Titular: <strong>Fabio Alejandro Sosa</strong>
                         </li>
-                        <li className='bill-payment-item'>
-                          Titular: <strong>Jose Manuel Adrian Iramain</strong>
-                        </li>
-                        <li className='bill-payment-item'>
-                          CUIL / CUIT: <strong>20-25444278-0</strong>
-                        </li>
+                        <p className='text-center text-danger bill-payment-item m-0 fs-2 text-uppercase'>
+                          Luego Envias tu comprobante de pago por WhatsApp{' '}
+                          <strong>381 678-3493</strong>
+                        </p>
                       </ul>
                     </ul>
-
-                    <p className='text-center text-danger bill-payment-item m-0 mt-5 fs-2 text-uppercase'>
-                      Puede abonar en: <strong> Pago Facil </strong> Pedis
-                      ingresar dinero en REBA, luego brindás el CUIL:{' '}
-                      <strong>20254442780</strong>.
-                    </p>
-                    <p className='text-center text-danger bill-payment-item m-0 fs-2 text-uppercase'>
-                      Sexo:<strong>masculino</strong> DNI:{' '}
-                      <strong>25444278</strong> Y el monto que vas a ingresar
-                      como pago de tu abono.
-                    </p>
-                    <p className='text-center text-danger bill-payment-item m-0 fs-2 text-uppercase'>
-                      Luego Envias tu comprobante de pago por WhatsApp{' '}
-                      <strong>3815285322</strong> o por email a:{' '}
-                      <strong>info.wifi.net@gmail.com</strong>
-                    </p>
                   </Col>
                 </Row>
               </Col>
