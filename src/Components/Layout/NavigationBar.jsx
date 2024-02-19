@@ -57,19 +57,8 @@ const NavigationBar = () => {
           </Nav.Item>
         </Nav>
         <Nav className='ml-auto'>
-          <NavDropdown
-            title={`Usuario: ${userInfo.name}`}
-            id='basic-nav-dropdown'
-          >
-            <NavDropdown.Item>
-              <FontAwesomeIcon icon={faUsers} className='mr-2' />
-              Cambiar contraseña
-            </NavDropdown.Item>
-            <NavDropdown.Item href='/logout'>
-              <FontAwesomeIcon icon={faUserPlus} className='mr-2' />
-              Cerrar sesión
-            </NavDropdown.Item>
-          </NavDropdown>
+          <p className='user'>{`Usuario: ${userInfo.name}`}</p>
+          <Nav.Link href='/logout'> Cerrar sesión</Nav.Link>
         </Nav>
       </Navbar.Collapse>
     </Navbar>

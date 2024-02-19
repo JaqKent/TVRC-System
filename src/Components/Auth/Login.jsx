@@ -5,6 +5,7 @@ import { notify } from 'react-notify-toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignInAlt } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import logo from '../../assets/LOGO TVRC.png';
 
 function Home() {
   const [formData, setFormData] = useState({
@@ -74,7 +75,7 @@ function Home() {
         </Card>
       </Col>
       <Col className='my-auto text-center justify-content-center'>
-        <Image src={process.env.PUBLIC_URL + '/img/logo.png'} height={300} />
+        <Image src={logo} height={300} />
       </Col>
     </Row>
   );

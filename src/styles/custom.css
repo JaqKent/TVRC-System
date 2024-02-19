@@ -4692,6 +4692,9 @@ input[type='button'].btn-block {
   padding-right: 0;
   padding-left: 0;
 }
+.register{
+  margin-right:1rem !important;
+}
 .navbar-expand .navbar-nav {
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
@@ -9807,6 +9810,12 @@ button.bg-dark:focus {
 }
 .text-center {
   text-align: center !important;
+}
+.user{
+  margin:0 !important;
+  color:white;
+  align-items: center;
+  padding: 8px;
 }
 @media (min-width: 576px) {
   .text-sm-left {
