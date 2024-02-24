@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ListGroup, Row, Col } from 'react-bootstrap';
+import { ListGroup, Row, Col, Button } from 'react-bootstrap';
 import Axios from 'axios';
 
 import { notify } from 'react-notify-toast';
@@ -72,7 +72,7 @@ const ListClients = () => {
 
         {/* Caja de búsqueda */}
         <h5 className='m-0 p-1 text-success'>
-          <i> (Clientes activos: {activeClients})</i>
+          <i> (Socios activos: {activeClients})</i>
         </h5>
 
         <Row>
@@ -83,15 +83,14 @@ const ListClients = () => {
             />
           </Col>
         </Row>
-        <p className='m-1 p-1 bg-light text-success text-center'>
-          Agregar Jugador
-          <FontAwesomeIcon
-            className='ml-2 text-info'
-            style={{ cursor: 'pointer' }}
-            onClick={handleAddClientsModalShow}
-            icon={faPlusSquare}
-          />
-        </p>
+        <Button
+          variant='primary'
+          style={{ cursor: 'pointer', margin: '1rem 0 0 0' }}
+          onClick={handleAddClientsModalShow}
+        >
+          Agregar Socio {''}
+          <FontAwesomeIcon icon={faPlusSquare} />
+        </Button>
 
         {/* Lista de clientes */}
         <Row>

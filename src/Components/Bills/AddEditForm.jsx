@@ -13,6 +13,8 @@ const AddEditForm = (props) => {
   const [month, setMonth] = useState(moment().add(10, 'd').format('L'));
   const [additionalNotes, setAdditionalNotes] = useState('');
   const [partial, setPartial] = useState(false);
+  const [annualPayment, setAnnualPayment] = useState(false);
+  const [year, setYear] = useState(moment().year()); // Nuevo estado para el año
 
   useEffect(() => {
     if (props.selectedClient) {
@@ -25,7 +27,7 @@ const AddEditForm = (props) => {
   }, [props]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, checked } = e.target;
     switch (name) {
       case 'playerId':
         setPlayerId(value);
@@ -48,6 +50,16 @@ const AddEditForm = (props) => {
       case 'additionalNotes':
         setAdditionalNotes(value);
         break;
+      case 'annualPayment':
+        setAnnualPayment(checked);
+        // Si se selecciona el pago anual, deshabilitar el campo del mes
+        if (checked) {
+          setMonth('');
+        }
+        break;
+      case 'year': // Manejar el cambio en el año
+        setYear(value);
+        break;
       default:
         break;
     }
@@ -68,6 +80,8 @@ const AddEditForm = (props) => {
           month,
           additionalNotes,
           partial,
+          annualPayment,
+          year, // Enviar el año junto con otros datos
         },
         { headers: { 'auth-token': localStorage.getItem('token') } }
       );
@@ -100,7 +114,7 @@ const AddEditForm = (props) => {
               onChange={handleChange}
               name='playerId'
             >
-              <option value=''>Seleccione un jugador...</option>
+              <option value=''>Seleccione un Socio...</option>
               {props.clientList.map((player) => (
                 <option key={player._id} value={player._id}>
                   {player.name}
@@ -114,10 +128,46 @@ const AddEditForm = (props) => {
               type='checkbox'
               label='Es pago parcial'
               checked={partial}
-              onChange={() => setPartial(!partial)}
+              onChange={handleChange}
               name='partial'
             />
           </Form.Group>
+
+          <Form.Group>
+            <Form.Check
+              type='checkbox'
+              label='Es pago anual'
+              checked={annualPayment}
+              onChange={handleChange}
+              name='annualPayment'
+            />
+          </Form.Group>
+
+          {annualPayment && (
+            <Form.Group>
+              <Form.Label>Año a cobrar</Form.Label>
+              <Form.Control
+                required
+                type='number'
+                value={year}
+                onChange={handleChange}
+                name='year'
+              />
+            </Form.Group>
+          )}
+
+          {!annualPayment && (
+            <Form.Group>
+              <Form.Label>Mes a cobrar</Form.Label>
+              <Form.Control
+                required
+                type='month'
+                value={month}
+                onChange={handleChange}
+                name='month'
+              />
+            </Form.Group>
+          )}
 
           <Form.Group>
             <Form.Label>Fecha de vencimiento</Form.Label>
@@ -149,17 +199,6 @@ const AddEditForm = (props) => {
               value={priceText}
               onChange={handleChange}
               name='priceText'
-            />
-          </Form.Group>
-
-          <Form.Group>
-            <Form.Label>Mes a cobrar</Form.Label>
-            <Form.Control
-              required
-              type='month'
-              value={month}
-              onChange={handleChange}
-              name='month'
             />
           </Form.Group>
 

@@ -108,7 +108,7 @@ const DetailClients = (props) => {
           <h1 className='display-4 display-5'>{data.name}</h1>
           <small className='text-danger'>
             <strong>
-              {data.unSubscribingDate ? 'Jugador dado de baja' : ''}
+              {data.unSubscribingDate ? 'Socio dado de baja' : ''}
             </strong>
           </small>
         </Col>

@@ -68,10 +68,10 @@ const SearchBox = (props) => {
         <Col sm='4'>
           <Form.Control
             type='text'
-            name='address'
-            value={searchData.address}
+            name='category'
+            value={searchData.category}
             onChange={handleChange}
-            placeholder='Dirección'
+            placeholder='Categoria'
           />
         </Col>
 

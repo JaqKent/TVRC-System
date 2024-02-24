@@ -239,15 +239,20 @@ const PhysicalBill = () => {
               <Col md='4' className='border v-center'>
                 <p className='lead m-0 py-2'>A pagar:</p>
               </Col>
-              <Col className='border v-center'>{`Pesos ${data.priceText}.-`}</Col>
+              <Col className='border v-center'>
+                {`Pesos ${data.priceText}.-`}
+                {data.partial ? ' Pago Parcial' : ''}
+              </Col>
             </Row>
             <Row>
               <Col md='4' className='border v-center'>
                 <p className='lead m-0 py-2'>Como:</p>
               </Col>
-              <Col className='border v-center'>{`Mes: ${moment(
-                data.month
-              ).format('MMMM YYYY')}`}</Col>
+              <Col className='border v-center'>
+                {data.month
+                  ? `Mes: ${moment(data.month).format('MMMM YYYY')}`
+                  : `Año : ${data.year}`}
+              </Col>
             </Row>
             <Row className='border v-center'>
               <Col md='8'>
