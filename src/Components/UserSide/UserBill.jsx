@@ -6,11 +6,10 @@ import Axios from 'axios';
 import { notify } from 'react-notify-toast';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
-import LoadingScreen from '../../Layout/LoadingScreen';
+import LoadingScreen from '../Layout/LoadingScreen';
 import { useParams } from 'react-router-dom';
-import logo from '../../../assets/LOGO TVRC.png';
 
-const PhysicalBill = () => {
+const UserBill = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [state, setState] = useState({
@@ -18,8 +17,6 @@ const PhysicalBill = () => {
     isLoading: true,
     data: {},
     clientData: {},
-    email: '',
-    displayConfirmationEmail: false,
   });
 
   const {
@@ -27,37 +24,23 @@ const PhysicalBill = () => {
     isLoading,
     data,
     clientData,
-    email,
     displayConfirmationEmail,
   } = state;
 
   const billRef = useRef(null);
 
-  const handleDisplayConfirmationEmail = (value) => {
-    setState((prev) => ({
-      ...prev,
-      displayConfirmationEmail: value,
-    }));
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const HEADERSCONFIG = {
-          headers: { 'auth-token': localStorage.getItem('token') },
-        };
-
         const billResponse = await Axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/api/playerBills/get/${id}`,
-          HEADERSCONFIG
+          `${process.env.REACT_APP_BACKEND_URL}/api/playerBills/get/${id}`
         );
 
         if (billResponse.data.success) {
           setState((prev) => ({ ...prev, data: billResponse.data.data[0] }));
 
           const clientResponse = await Axios.get(
-            `${process.env.REACT_APP_BACKEND_URL}/api/players/get/${billResponse.data.data[0].playerId}`,
-            HEADERSCONFIG
+            `${process.env.REACT_APP_BACKEND_URL}/api/players/get/${billResponse.data.data[0].playerId}`
           );
 
           if (clientResponse.data.success) {
@@ -91,14 +74,6 @@ const PhysicalBill = () => {
       fileName: `${clientData.name} - ${moment(data.createdAt).format('L')}`,
     };
     savePDF(billRef.current, PDFCONFIG);
-  };
-
-  const handleSendWhatsApp = () => {
-    const userBillLink = `${process.env.REACT_APP_FRONTROUTE}/userBill/${id}`;
-    const whatsappMessage = `¡Hola! Aquí puedes ver y descargar tu boleta: ${userBillLink}`;
-    const encodedMessage = encodeURIComponent(whatsappMessage);
-    const whatsappLink = `https://api.whatsapp.com/send/?text=${encodedMessage}`;
-    window.open(whatsappLink, '_blank');
   };
 
   const handleSendPDF = (e) => {
@@ -157,25 +132,8 @@ const PhysicalBill = () => {
         <Col className='bg-white mt-3 mb-5 text-center p-3 shadow rounded'>
           <Row>
             <Col>
-              <Button
-                className='mb-2'
-                variant='primary'
-                onClick={handleSavePDF}
-              >
+              <Button variant='primary' onClick={handleSavePDF}>
                 Guardar PDF
-              </Button>
-              <Button
-                className='ml-2 mb-2'
-                variant='primary'
-                onClick={() => {
-                  handleDisplayConfirmationEmail(true);
-                }}
-                disabled={isSendingEmail}
-              >
-                Enviar por mail
-              </Button>
-              <Button variant='primary' onClick={handleSendWhatsApp}>
-                Enviar por Whatsapp
               </Button>
             </Col>
           </Row>
@@ -218,7 +176,11 @@ const PhysicalBill = () => {
           >
             <Row>
               <Col md='4' className='border v-center text-center'>
-                <img src={logo} height='150' alt='WiFi Net Logo' />
+                <img
+                  src={process.env.PUBLIC_URL + '/img/wifinetLogoFull.webp'}
+                  height='150'
+                  alt='WiFi Net Logo'
+                />
               </Col>
               <Col>
                 <Row className='border v-center'>
@@ -246,7 +208,7 @@ const PhysicalBill = () => {
 
             <Row>
               <Col md='4' className='border v-center'>
-                <p className='lead m-0 py-2'>Socio:</p>
+                <p className='lead m-0 py-2'>Cliente:</p>
               </Col>
               <Col className='border v-center'>{`${clientData.name} - ${clientData.address}`}</Col>
             </Row>
@@ -254,20 +216,15 @@ const PhysicalBill = () => {
               <Col md='4' className='border v-center'>
                 <p className='lead m-0 py-2'>A pagar:</p>
               </Col>
-              <Col className='border v-center'>
-                {`Pesos ${data.priceText}.-`}
-                {data.partial ? ' Pago Parcial' : ''}
-              </Col>
+              <Col className='border v-center'>{`Pesos ${data.priceText}.-`}</Col>
             </Row>
             <Row>
               <Col md='4' className='border v-center'>
                 <p className='lead m-0 py-2'>Como:</p>
               </Col>
-              <Col className='border v-center'>
-                {data.month
-                  ? `Mes: ${moment(data.month).format('MMMM YYYY')}`
-                  : `Año : ${data.year}`}
-              </Col>
+              <Col className='border v-center'>{`Abono del mes: ${moment(
+                data.month
+              ).format('MMMM YYYY')}`}</Col>
             </Row>
             <Row className='border v-center'>
               <Col md='8'>
@@ -276,38 +233,48 @@ const PhysicalBill = () => {
                     <h1 className='bill-payment-title text-info'>
                       Métodos de pago
                     </h1>
-
                     <ul>
                       <li>
                         <h2 className='bill-payment-subtitle mt-3 text-uppercase'>
-                          Puede abonar en <strong> Efectivo </strong> por
-                          tesoreria.
-                        </h2>
-                      </li>
-                    </ul>
-                    <ul>
-                      <li>
-                        <h2 className='bill-payment-subtitle mt-3 text-uppercase'>
-                          Por Trasnferencia a Banco Nación
+                          CBU - REBA "Rebanking" (Transatlantica Compañía
+                          Financiera S.A.)
                         </h2>
                       </li>
 
                       <ul>
                         <li className='bill-payment-item'>
-                          N° de CBU: <strong>0110510030051019254879</strong>
+                          N° de Cuenta: <strong>999-180087/2</strong>
                         </li>
                         <li className='bill-payment-item'>
-                          Alias: <strong>VERDEAMARELLA2024</strong>
+                          N° de CBU: <strong>4150999718001800870027</strong>
                         </li>
                         <li className='bill-payment-item'>
-                          Titular: <strong>Fabio Alejandro Sosa</strong>
+                          Alias: <strong>jma.iramain.ars</strong>
                         </li>
-                        <p className='text-center text-danger bill-payment-item m-0 fs-2 text-uppercase'>
-                          Luego Envias tu comprobante de pago por WhatsApp{' '}
-                          <strong>381 678-3493</strong>
-                        </p>
+                        <li className='bill-payment-item'>
+                          Titular: <strong>Jose Manuel Adrian Iramain</strong>
+                        </li>
+                        <li className='bill-payment-item'>
+                          CUIL / CUIT: <strong>20-25444278-0</strong>
+                        </li>
                       </ul>
                     </ul>
+
+                    <p className='text-center text-danger bill-payment-item m-0 mt-5 fs-2 text-uppercase'>
+                      Puede abonar en: <strong> Pago Facil </strong> Pedis
+                      ingresar dinero en REBA, luego brindás el CUIL:{' '}
+                      <strong>20254442780</strong>.
+                    </p>
+                    <p className='text-center text-danger bill-payment-item m-0 fs-2 text-uppercase'>
+                      Sexo:<strong>masculino</strong> DNI:{' '}
+                      <strong>25444278</strong> Y el monto que vas a ingresar
+                      como pago de tu abono.
+                    </p>
+                    <p className='text-center text-danger bill-payment-item m-0 fs-2 text-uppercase'>
+                      Luego Envias tu comprobante de pago por WhatsApp{' '}
+                      <strong>3815285322</strong> o por email a:{' '}
+                      <strong>info.wifi.net@gmail.com</strong>
+                    </p>
                   </Col>
                 </Row>
               </Col>
@@ -333,4 +300,4 @@ const PhysicalBill = () => {
   );
 };
 
-export default PhysicalBill;
+export default UserBill;

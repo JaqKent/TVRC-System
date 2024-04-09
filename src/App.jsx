@@ -17,6 +17,7 @@ import PhysicalBill from './Components/Bills/Printing/PhisicalBill';
 import BatchPrinting from './Components/Bills/Printing/BatchPrinting';
 import ListClients from './Components/Clients/ListClients';
 import './styles/main.css';
+import UserBill from './Components/UserSide/UserBill';
 
 moment.locale('es');
 
@@ -45,6 +46,9 @@ function App() {
             <Route path='/bills/print/:id' element={<PhysicalBill />} />
 
             <Route path='/bills/printAll' element={<BatchPrinting />} />
+
+            {/*User PDF Bill*/}
+            <Route path='/userBill/:id' element={<UserBill />} />
           </Routes>
         </Container>
       </Router>

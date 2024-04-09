@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Navbar, NavDropdown, Nav } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUsers, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { Link, useLocation } from 'react-router-dom';
+import { Navbar, Nav } from 'react-bootstrap';
 import Axios from 'axios';
 
 const NavigationBar = () => {
+  const location = useLocation();
   const [userInfo, setUserInfo] = useState({
     name: '(No loggeado)',
     token: '',
@@ -38,29 +37,33 @@ const NavigationBar = () => {
 
   return (
     <Navbar bg='primary' variant='dark' expand='lg'>
-      <Link className='text-xl' to='/clients/list'>
-        <Navbar.Brand>Tafi Viejo Rugby Club</Navbar.Brand>
-      </Link>
-      <Navbar.Toggle aria-controls='basic-navbar-nav' />
-      <Navbar.Collapse id='basic-navbar-nav'>
-        <Nav className='mr-auto'>
-          <Nav.Item>
-            <Nav.Link href='/'>Jugadores Activos</Nav.Link>
-          </Nav.Item>
-          <Link to='/clients/list-baja'>
-            <Navbar.Brand className='client-manager-logo'>
-              Jugadores Dados de Baja
-            </Navbar.Brand>
+      {!location.pathname.startsWith('/userBill/') && (
+        <>
+          <Link className='text-xl' to='/clients/list'>
+            <Navbar.Brand>Tafi Viejo Rugby Club</Navbar.Brand>
           </Link>
-          <Nav.Item>
-            <Nav.Link href='/bills/list'>Boletas</Nav.Link>
-          </Nav.Item>
-        </Nav>
-        <Nav className='ml-auto'>
-          <p className='user'>{`Usuario: ${userInfo.name}`}</p>
-          <Nav.Link href='/logout'> Cerrar sesión</Nav.Link>
-        </Nav>
-      </Navbar.Collapse>
+          <Navbar.Toggle aria-controls='basic-navbar-nav' />
+          <Navbar.Collapse id='basic-navbar-nav'>
+            <Nav className='mr-auto'>
+              <Nav.Item>
+                <Nav.Link href='/'>Socios Activos</Nav.Link>
+              </Nav.Item>
+              <Link to='/clients/list-baja'>
+                <Navbar.Brand className='client-manager-logo'>
+                  Socios Dados de Baja
+                </Navbar.Brand>
+              </Link>
+              <Nav.Item>
+                <Nav.Link href='/bills/list'>Boletas</Nav.Link>
+              </Nav.Item>
+            </Nav>
+            <Nav className='ml-auto'>
+              <p className='user'>{`Usuario: ${userInfo.name}`}</p>
+              <Nav.Link href='/logout'> Cerrar sesión</Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </>
+      )}
     </Navbar>
   );
 };
