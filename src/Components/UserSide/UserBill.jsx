@@ -8,6 +8,7 @@ import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import LoadingScreen from '../Layout/LoadingScreen';
 import { useParams } from 'react-router-dom';
+import logo from '../../assets/LOGO TVRC.png';
 
 const UserBill = () => {
   const navigate = useNavigate();
@@ -176,11 +177,7 @@ const UserBill = () => {
           >
             <Row>
               <Col md='4' className='border v-center text-center'>
-                <img
-                  src={process.env.PUBLIC_URL + '/img/wifinetLogoFull.webp'}
-                  height='150'
-                  alt='WiFi Net Logo'
-                />
+                <img src={logo} height='150' alt='tafi viejo rugby club Logo' />
               </Col>
               <Col>
                 <Row className='border v-center'>
