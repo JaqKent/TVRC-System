@@ -218,7 +218,7 @@ const PhysicalBill = () => {
           >
             <Row>
               <Col md='4' className='border v-center text-center'>
-                <img src={logo} height='150' alt='WiFi Net Logo' />
+                <img src={logo} height='150' alt='tafi viejo rugby club Logo' />
               </Col>
               <Col>
                 <Row className='border v-center'>

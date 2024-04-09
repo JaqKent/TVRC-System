@@ -230,48 +230,38 @@ const UserBill = () => {
                     <h1 className='bill-payment-title text-info'>
                       Métodos de pago
                     </h1>
+
                     <ul>
                       <li>
                         <h2 className='bill-payment-subtitle mt-3 text-uppercase'>
-                          CBU - REBA "Rebanking" (Transatlantica Compañía
-                          Financiera S.A.)
+                          Puede abonar en <strong> Efectivo </strong> por
+                          tesoreria.
+                        </h2>
+                      </li>
+                    </ul>
+                    <ul>
+                      <li>
+                        <h2 className='bill-payment-subtitle mt-3 text-uppercase'>
+                          Por Trasnferencia a Banco Nación
                         </h2>
                       </li>
 
                       <ul>
                         <li className='bill-payment-item'>
-                          N° de Cuenta: <strong>999-180087/2</strong>
+                          N° de CBU: <strong>0110510030051019254879</strong>
                         </li>
                         <li className='bill-payment-item'>
-                          N° de CBU: <strong>4150999718001800870027</strong>
+                          Alias: <strong>VERDEAMARELLA2024</strong>
                         </li>
                         <li className='bill-payment-item'>
-                          Alias: <strong>jma.iramain.ars</strong>
+                          Titular: <strong>Fabio Alejandro Sosa</strong>
                         </li>
-                        <li className='bill-payment-item'>
-                          Titular: <strong>Jose Manuel Adrian Iramain</strong>
-                        </li>
-                        <li className='bill-payment-item'>
-                          CUIL / CUIT: <strong>20-25444278-0</strong>
-                        </li>
+                        <p className='text-center text-danger bill-payment-item m-0 fs-2 text-uppercase'>
+                          Luego Envias tu comprobante de pago por WhatsApp{' '}
+                          <strong>381 678-3493</strong>
+                        </p>
                       </ul>
                     </ul>
-
-                    <p className='text-center text-danger bill-payment-item m-0 mt-5 fs-2 text-uppercase'>
-                      Puede abonar en: <strong> Pago Facil </strong> Pedis
-                      ingresar dinero en REBA, luego brindás el CUIL:{' '}
-                      <strong>20254442780</strong>.
-                    </p>
-                    <p className='text-center text-danger bill-payment-item m-0 fs-2 text-uppercase'>
-                      Sexo:<strong>masculino</strong> DNI:{' '}
-                      <strong>25444278</strong> Y el monto que vas a ingresar
-                      como pago de tu abono.
-                    </p>
-                    <p className='text-center text-danger bill-payment-item m-0 fs-2 text-uppercase'>
-                      Luego Envias tu comprobante de pago por WhatsApp{' '}
-                      <strong>3815285322</strong> o por email a:{' '}
-                      <strong>info.wifi.net@gmail.com</strong>
-                    </p>
                   </Col>
                 </Row>
               </Col>
