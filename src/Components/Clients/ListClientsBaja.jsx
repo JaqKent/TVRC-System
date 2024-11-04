@@ -13,6 +13,7 @@ import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import SearchBox from './SearchBox';
 import ModifyClientDetails from './ModifyClientDetail';
 import Pagin from '../Layout/Pagination';
+import Papa from 'papaparse';
 
 const ListClientsBaja = () => {
   const [clientList, setClientList] = useState([]);
@@ -59,6 +60,52 @@ const ListClientsBaja = () => {
     setFilteredClients(filtered);
   }, [clientListCopy]);
 
+  const downloadCSV = () => {
+    const formattedData = clientList.map(
+      ({
+        _id,
+        createdAt,
+        updatedAt,
+        unSubscribingReason,
+        unSubscribingDate,
+        createdBy,
+        priceText,
+        ...rest
+      }) => ({
+        Nombre: rest.name,
+        Categoria: rest.category,
+        Direccion: rest.address,
+        DNI: rest.dni,
+        'Fecha de Nacimiento': rest.birthday?.$date,
+        Apodo: rest.nickName,
+        'Fecha de Inscripcion': rest.inscriptionDate?.$date,
+        Cuota: rest.price,
+        Telefono: rest.phone,
+        'Telefono Alternativo': rest.phoneAlt,
+        Email: rest.email,
+        'Obra Social': rest.obraSocial,
+        'Tipo de Sangre': rest.bloodType,
+        'Talla de Camiseta': rest.tshirtSize,
+        'Talla de Pantalon': rest.shortSize,
+      })
+    );
+
+    const csv = Papa.unparse(formattedData, {
+      header: true,
+      delimiter: ';',
+      quotes: true,
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'jugadores_activos.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   useEffect(() => {
     getData();
   }, [getData]);
@@ -94,15 +141,22 @@ const ListClientsBaja = () => {
             />
           </Col>
         </Row>
-        <Button
-          variant='primary'
-          style={{ cursor: 'pointer', margin: '1rem 0 0 0' }}
-          onClick={handleAddClientsModalShow}
-        >
-          Agregar Socio {''}
-          <FontAwesomeIcon icon={faPlusSquare} />
-        </Button>
-
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Button
+            variant='primary'
+            style={{ cursor: 'pointer', margin: '1rem 0 0 0' }}
+            onClick={handleAddClientsModalShow}
+          >
+            Agregar Socio {''}
+            <FontAwesomeIcon icon={faPlusSquare} />
+          </Button>
+          <Button
+            style={{ cursor: 'pointer', margin: '1rem 0 0 0' }}
+            onClick={downloadCSV}
+          >
+            Descargar Excel
+          </Button>
+        </div>
         {/* Lista de clientes */}
         <Row>
           <Col className='p-3 my-3 bg-light rounded shadow'>
