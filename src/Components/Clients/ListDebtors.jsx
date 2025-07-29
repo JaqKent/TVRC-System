@@ -184,7 +184,7 @@ const ListDebtorsPlayer = () => {
               <Link
                 key={player._id}
                 className='text-decoration-none text-dark'
-                to={`/players/details/${player._id}`}
+                to={`/clients/details/${player._id}`}
               >
                 <ListGroup.Item>
                   <Row>
