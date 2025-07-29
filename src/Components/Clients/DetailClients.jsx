@@ -15,6 +15,7 @@ import AddEditForm from '../Bills/AddEditForm';
 import DeleteConfirmation from './DeleteConfirmation';
 import AskForPrint from '../Bills/AskForPrints';
 import { useNavigate, useParams } from 'react-router-dom';
+import AccountStatus from '../AccountStatus/AccountStatus';
 
 const DetailClients = (props) => {
   const { id } = useParams();
@@ -216,6 +217,11 @@ const DetailClients = (props) => {
               </li>
             </ul>
           </div>
+        </Col>
+      </Row>
+      <Row className='mt-3'>
+        <Col md={12} className='shadow bg-light rounded p-3'>
+          <AccountStatus client={data} onUpdate={getClientInfo} />
         </Col>
       </Row>
     </>
