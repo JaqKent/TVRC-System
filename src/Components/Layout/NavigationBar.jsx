@@ -54,6 +54,11 @@ const NavigationBar = () => {
                 </Navbar.Brand>
               </Link>
               <Nav.Item>
+                <Nav.Link href='/clients/list-debtors'>
+                  Lista de Deudores
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
                 <Nav.Link href='/bills/list'>Boletas</Nav.Link>
               </Nav.Item>
             </Nav>
