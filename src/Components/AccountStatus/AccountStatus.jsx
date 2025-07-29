@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import moment from 'moment';
 
-const AccountStatusPlayer = ({ player, onUpdate }) => {
+const AccountStatus = ({ player, onUpdate }) => {
   const [history, setHistory] = useState(player.paymentHistory || []);
   const [expanded, setExpanded] = useState(null);
 
@@ -189,4 +189,4 @@ const AccountStatusPlayer = ({ player, onUpdate }) => {
   );
 };
 
-export default AccountStatusPlayer;
+export default AccountStatus;

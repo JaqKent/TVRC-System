@@ -221,7 +221,7 @@ const DetailClients = (props) => {
       </Row>
       <Row className='mt-3'>
         <Col md={12} className='shadow bg-light rounded p-3'>
-          <AccountStatus client={data} onUpdate={getClientInfo} />
+          <AccountStatus player={data} onUpdate={getClientInfo} />
         </Col>
       </Row>
     </>
