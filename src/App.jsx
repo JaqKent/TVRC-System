@@ -11,6 +11,7 @@ import NavigationBar from './Components/Layout/NavigationBar';
 import Login from './Components/Auth/Login';
 import Logout from './Components/Auth/Logout';
 import ListClientsBaja from './Components/Clients/ListClientsBaja';
+import ListDebtors from './Components/Clients/ListDebtors';
 import DetailClients from './Components/Clients/DetailClients';
 import BillScreen from './Components/Bills/BillScreens';
 import PhysicalBill from './Components/Bills/Printing/PhisicalBill';
@@ -39,6 +40,7 @@ function App() {
             {/* Client routes */}
             <Route path='/clients/list' element={<ListClients />} />
             <Route path='/clients/list-baja' element={<ListClientsBaja />} />
+            <Route path='/clients/list-debtors' element={<ListDebtors />} />
             <Route path='/clients/details/:id' element={<DetailClients />} />
 
             {/* Bills routes */}
