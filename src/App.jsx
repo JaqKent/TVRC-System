@@ -17,6 +17,7 @@ import BillScreen from './Components/Bills/BillScreens';
 import PhysicalBill from './Components/Bills/Printing/PhisicalBill';
 import BatchPrinting from './Components/Bills/Printing/BatchPrinting';
 import ListClients from './Components/Clients/ListClients';
+import CashBalance from './Components/CashBalance/CashBalance';
 import './styles/main.css';
 import UserBill from './Components/UserSide/UserBill';
 
@@ -48,6 +49,8 @@ function App() {
             <Route path='/bills/print/:id' element={<PhysicalBill />} />
 
             <Route path='/bills/printAll' element={<BatchPrinting />} />
+
+            <Route path='/balance' element={<CashBalance />} />
 
             {/*User PDF Bill*/}
             <Route path='/userBill/:id' element={<UserBill />} />

@@ -8,51 +8,53 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import Axios from 'axios';
 import moment from 'moment';
+import { notify } from 'react-notify-toast';
 import LoadingScreen from '../Layout/LoadingScreen';
 import ModifyClientDetails from './ModifyClientDetail';
-import { notify } from 'react-notify-toast';
 import AddEditForm from '../Bills/AddEditForm';
 import DeleteConfirmation from './DeleteConfirmation';
 import AskForPrint from '../Bills/AskForPrints';
 import { useNavigate, useParams } from 'react-router-dom';
 import AccountStatus from '../AccountStatus/AccountStatus';
 
-const DetailClients = (props) => {
+const DetailPlayers = (props) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState({});
-  const [allClients, setAllClients] = useState([]);
+  const [allPlayers, setAllPlayers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [addClientsModalShow, setAddClientsModalShow] = useState(false);
+  const [addPlayersModalShow, setAddPlayersModalShow] = useState(false);
   const [showBills, setShowBills] = useState(false);
   const [deleteConfirmationShow, setDeleteConfirmationShow] = useState(false);
   const [askToPrintModalShow, setAskToPrintModalShow] = useState(false);
   const [idToPrint, setIdToPrint] = useState('');
 
   useEffect(() => {
-    getClientInfo();
+    getPlayerInfo();
   }, []);
 
-  const getClientInfo = () => {
-    const singleClient = Axios.get(
+  const getPlayerInfo = () => {
+    const singlePlayer = Axios.get(
       `${process.env.REACT_APP_BACKEND_URL}/api/players/get/${id}`,
       {
         headers: { 'auth-token': localStorage.getItem('token') },
       }
     );
 
-    const allClients = Axios.get(
+    const allPlayersReq = Axios.get(
       `${process.env.REACT_APP_BACKEND_URL}/api/players/get/`,
       {
         headers: { 'auth-token': localStorage.getItem('token') },
       }
     );
 
-    Axios.all([singleClient, allClients])
+    Axios.all([singlePlayer, allPlayersReq])
       .then(
-        Axios.spread((singleClientRes, allClientsRes) => {
-          setData(singleClientRes.data.data[0]);
-          setAllClients(allClientsRes.data);
+        Axios.spread((singlePlayerRes, allPlayersRes) => {
+          console.log('allPlayersRes.data:', allPlayersRes.data);
+
+          setData(singlePlayerRes.data.data[0]);
+          setAllPlayers(allPlayersRes.data);
           setIsLoading(false);
         })
       )
@@ -78,14 +80,16 @@ const DetailClients = (props) => {
         show={deleteConfirmationShow}
         onHide={() => setDeleteConfirmationShow(!deleteConfirmationShow)}
       />
+
       <AddEditForm
         show={showBills}
         onHide={() => setShowBills(!showBills)}
-        refresh={getClientInfo}
-        clientList={allClients}
-        selectedClient={data}
+        refresh={getPlayerInfo}
+        playerList={allPlayers}
+        selectedPlayer={data}
         askToPrint={askToPrint}
       />
+
       <AskForPrint
         {...props}
         show={askToPrintModalShow}
@@ -95,17 +99,16 @@ const DetailClients = (props) => {
 
       <ModifyClientDetails
         isEdit={true}
-        clientToEdit={data}
-        refresh={getClientInfo}
+        playerToEdit={data}
+        refresh={getPlayerInfo}
         notify={(message, type) => notify.show(message, type, 3000, 'blue')}
-        onHide={() => setAddClientsModalShow(!addClientsModalShow)}
-        show={addClientsModalShow}
+        onHide={() => setAddPlayersModalShow(!addPlayersModalShow)}
+        show={addPlayersModalShow}
       />
+
       <Row className='mt-3'>
         <Col md={4} className='shadow bg-light rounded p-3'>
-          <small className='text-muted text-uppercase'>
-            Nombre del cliente:
-          </small>
+          <small className='text-muted text-uppercase'>Nombre del socio:</small>
           <h1 className='display-4 display-5'>{data.name}</h1>
           <small className='text-danger'>
             <strong>
@@ -119,12 +122,12 @@ const DetailClients = (props) => {
           style={{ height: 70 }}
         >
           <Button
-            onClick={() => setAddClientsModalShow(!addClientsModalShow)}
+            onClick={() => setAddPlayersModalShow(!addPlayersModalShow)}
             size='sm'
             className='mr-2'
           >
             <FontAwesomeIcon icon={faFileInvoice} className='mr-2' />
-            Editar cliente
+            Editar socio
           </Button>
           <Button
             onClick={() => setShowBills(!showBills)}
@@ -140,10 +143,11 @@ const DetailClients = (props) => {
             variant='danger'
           >
             <FontAwesomeIcon icon={faTrash} className='mr-2' />
-            Eliminar cliente
+            Eliminar socio
           </Button>
         </Col>
       </Row>
+
       <Row className='mt-3'>
         <Col md={4} className='shadow bg-light rounded p-3'>
           <small className='text-muted text-uppercase text-weigth-bold'>
@@ -162,13 +166,14 @@ const DetailClients = (props) => {
               {data.phoneAlt ? data.phoneAlt : ''}
             </li>
             <li>
-              <span className='text-muted'>Categoria:</span> {data.category}
+              <span className='text-muted'>Categoría:</span> {data.category}
             </li>
             <li>
               <span className='text-muted'>DNI:</span> {data.dni}
             </li>
           </ul>
         </Col>
+
         <Col className='shadow bg-light rounded p-3 ml-3 '>
           <small className='text-muted text-uppercase text-weigth-bold'>
             Datos adicionales:
@@ -178,7 +183,6 @@ const DetailClients = (props) => {
               <span className='text-muted'>Fecha de alta:</span>{' '}
               {moment(data.inscriptionDate).format('L')}
             </li>
-
             <li>
               <span className='text-muted'>Precio:</span> ${data.price}
             </li>
@@ -186,11 +190,11 @@ const DetailClients = (props) => {
               <span className='text-muted'>Obra Social:</span> {data.obraSocial}
             </li>
             <li>
-              <span className='text-muted'>Grupo Sanguineo:</span>{' '}
+              <span className='text-muted'>Grupo Sanguíneo:</span>{' '}
               {data.bloodType}
             </li>
             <li>
-              <span className='text-muted'>Talle Camiseta:</span>
+              <span className='text-muted'>Talle Camiseta:</span>{' '}
               {data.tshirtSize}
             </li>
             <li>
@@ -219,13 +223,14 @@ const DetailClients = (props) => {
           </div>
         </Col>
       </Row>
+
       <Row className='mt-3'>
         <Col md={12} className='shadow bg-light rounded p-3'>
-          <AccountStatus player={data} onUpdate={getClientInfo} />
+          <AccountStatus player={data} onUpdate={getPlayerInfo} />
         </Col>
       </Row>
     </>
   );
 };
 
-export default DetailClients;
+export default DetailPlayers;

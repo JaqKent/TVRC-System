@@ -61,6 +61,9 @@ const NavigationBar = () => {
               <Nav.Item>
                 <Nav.Link href='/bills/list'>Boletas</Nav.Link>
               </Nav.Item>
+              <Nav.Item>
+                <Nav.Link href='/balance'>Caja</Nav.Link>
+              </Nav.Item>
             </Nav>
             <Nav className='ml-auto'>
               <p className='user'>{`Usuario: ${userInfo.name}`}</p>

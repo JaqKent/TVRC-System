@@ -22,13 +22,14 @@ const BillScreen = (props) => {
     getData();
   }, []);
 
-  const addBill = () => {
+  const addBill = (selectedClient = null) => {
     setState((prevState) => ({
       ...prevState,
       modalState: {
         ...prevState.modalState,
         addBill: !prevState.modalState.addBill,
       },
+      selectedClient,
     }));
   };
 
@@ -82,8 +83,9 @@ const BillScreen = (props) => {
         show={state.modalState.addBill}
         onHide={addBill}
         refresh={getData}
-        clientList={state.clientList}
+        playerList={state.clientList}
         askToPrint={(i) => askToPrint(i)}
+        selectedClient={state.selectedClient}
       />
       <AskForPrint
         {...props}
