@@ -274,7 +274,7 @@ const AddEditForm = (props) => {
           <Form.Group>
             <Form.Check
               type='checkbox'
-              label='Otros conceptos (ej. instalación)'
+              label='Otros conceptos (ej. Ropa, Eventos, etc.)'
               checked={otrosConceptos}
               onChange={() => setOtrosConceptos(!otrosConceptos)}
               name='otrosConceptos'
