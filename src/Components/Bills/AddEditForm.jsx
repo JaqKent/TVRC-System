@@ -242,8 +242,6 @@ const AddEditForm = (props) => {
               onChange={handleChange}
               name='playerId'
             >
-              {console.log('playerList en AddEditForm:', props.playerList)}
-
               <option value=''>Seleccione un socio...</option>
               {Array.isArray(props.playerList) &&
                 props.playerList.map((player) => (

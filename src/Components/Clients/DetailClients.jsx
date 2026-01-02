@@ -51,8 +51,6 @@ const DetailPlayers = (props) => {
     Axios.all([singlePlayer, allPlayersReq])
       .then(
         Axios.spread((singlePlayerRes, allPlayersRes) => {
-          console.log('allPlayersRes.data:', allPlayersRes.data);
-
           setData(singlePlayerRes.data.data[0]);
           setAllPlayers(allPlayersRes.data);
           setIsLoading(false);
