@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import moment from 'moment';
@@ -36,7 +37,7 @@ const AddClients = (props) => {
       setClientData({
         ...clientToEdit,
         inscriptionDate: moment(clientToEdit.inscriptionDate).format(
-          'YYYY-MM-DD'
+          'YYYY-MM-DD',
         ),
         unSubscribingDate: clientToEdit.unSubscribingDate
           ? moment(clientToEdit.unSubscribingDate).format('YYYY-MM-DD')
@@ -55,7 +56,7 @@ const AddClients = (props) => {
         clientData,
         {
           headers: { 'auth-token': localStorage.getItem('token') },
-        }
+        },
       )
         .then((response) => handleResponse(response))
         .catch((error) => handleError(error));
@@ -65,7 +66,7 @@ const AddClients = (props) => {
         clientData,
         {
           headers: { 'auth-token': localStorage.getItem('token') },
-        }
+        },
       )
         .then((response) => handleResponse(response))
         .catch((error) => handleError(error));

@@ -6,7 +6,7 @@ import Axios from 'axios';
 
 moment.locale('es');
 
-const AccountStatus = ({ player, onUpdate }) => {
+const AccountStatus = ({ player, onUpdate, onEditPayment, onDelete }) => {
   const [history, setHistory] = useState(player.paymentHistory || []);
   const [expanded, setExpanded] = useState(null);
   const [bills, setBills] = useState([]);
@@ -24,7 +24,7 @@ const AccountStatus = ({ player, onUpdate }) => {
         const res = await Axios.post(
           `${process.env.REACT_APP_BACKEND_URL}/api/playerBills/search`,
           { playerId: player._id },
-          { headers: { 'auth-token': localStorage.getItem('token') } }
+          { headers: { 'auth-token': localStorage.getItem('token') } },
         );
 
         if (res.data.success) {
@@ -45,7 +45,7 @@ const AccountStatus = ({ player, onUpdate }) => {
     setPaymentDateInput(
       payment.paymentDate
         ? moment(payment.paymentDate).format('YYYY-MM-DD')
-        : ''
+        : '',
     );
     setIsLatePayment(false);
     setAmountInput('');
@@ -66,7 +66,7 @@ const AccountStatus = ({ player, onUpdate }) => {
             : null,
           amount: isLatePayment ? Number(amountInput) : undefined,
         },
-        { headers: { 'auth-token': localStorage.getItem('token') } }
+        { headers: { 'auth-token': localStorage.getItem('token') } },
       );
 
       setShowConfirmModal(false);
@@ -83,7 +83,7 @@ const AccountStatus = ({ player, onUpdate }) => {
     const match = bills.find(
       (b) =>
         moment(b.month, ['MM/YYYY', 'YYYY-MM']).format('MM/YYYY') ===
-          normalizado && b.playerId === player._id
+          normalizado && b.playerId === player._id,
     );
 
     return match?._id || null;
@@ -119,7 +119,7 @@ const AccountStatus = ({ player, onUpdate }) => {
                 const totalPagado = isPartial
                   ? h.partialPayments.reduce(
                       (sum, p) => sum + Number(p.amount),
-                      0
+                      0,
                     )
                   : Number(h.amount);
 
@@ -186,6 +186,7 @@ const AccountStatus = ({ player, onUpdate }) => {
                                 <th>Monto</th>
                                 <th>Fecha de pago</th>
                                 <th>Boleta</th>
+                                <th>Acciones</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -207,15 +208,40 @@ const AccountStatus = ({ player, onUpdate }) => {
                                       onClick={() =>
                                         window.open(
                                           `/bills/print/${getBillIdForMonth(
-                                            h.month
+                                            h.month,
                                           )}`,
-                                          '_blank'
+                                          '_blank',
                                         )
                                       }
                                     >
                                       Ver boleta
                                     </Button>
                                   )}
+                                </td>
+                                <td>
+                                  <Button
+                                    variant='outline-info'
+                                    size='sm'
+                                    className='ml-2'
+                                    onClick={() => onEditPayment(h)}
+                                  >
+                                    Editar
+                                  </Button>
+                                  <Button
+                                    variant='outline-danger'
+                                    size='sm'
+                                    className='ml-2'
+                                    onClick={() => {
+                                      const confirmar = window.confirm(
+                                        '¿Seguro que deseas eliminar este pago?',
+                                      );
+                                      if (confirmar) {
+                                        onDelete(h);
+                                      }
+                                    }}
+                                  >
+                                    Borrar
+                                  </Button>
                                 </td>
                               </tr>
                             </tbody>

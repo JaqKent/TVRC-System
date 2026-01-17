@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { Form, Col, Button } from 'react-bootstrap';
 import Axios from 'axios';
@@ -23,20 +25,19 @@ const SearchBox = (props) => {
   };
 
   useEffect(() => {
-    // La lógica de búsqueda aquí
     if (searchData.name.length >= 3 || searchData.name.length === 0) {
       Axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/api/players/search`,
         searchData,
         {
           headers: { 'auth-token': localStorage.getItem('token') },
-        }
+        },
       ).then(({ data }) =>
         props.setResults(
           data.data
             .sort((a, b) => a.name.localeCompare(b.name))
-            .filter((element) => element.unSubscribingDate === null)
-        )
+            .filter((element) => element.unSubscribingDate === null),
+        ),
       );
     }
   }, [searchData]);
@@ -48,7 +49,7 @@ const SearchBox = (props) => {
       searchData,
       {
         headers: { 'auth-token': localStorage.getItem('token') },
-      }
+      },
     ).then(({ data }) => props.setResults(data.data));
   };
 

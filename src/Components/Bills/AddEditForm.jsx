@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import Axios from 'axios';
@@ -67,10 +68,43 @@ const AddEditForm = (props) => {
 
     try {
       const selectedPlayerData = props.playerList.find(
-        (p) => p._id === playerId
+        (p) => p._id === playerId,
       );
       if (!selectedPlayerData) {
         notify.show('Socio no válido o no encontrado.', 'error');
+        return;
+      }
+
+      const newMonth = moment(month, 'YYYY-MM').format('MM/YYYY');
+
+      const exists = selectedPlayerData.paymentHistory?.some(
+        (p) => p.month === newMonth && p._id !== props.selectedPayment?._id,
+      );
+      if (exists) {
+        notify.show(
+          `Ya existe un pago registrado para el mes ${newMonth}.`,
+          'error',
+        );
+        return;
+      }
+
+      if (props.selectedPayment?._id) {
+        await Axios.put(
+          `${process.env.REACT_APP_BACKEND_URL}/api/players/payment/${playerId}/${props.selectedPayment._id}`,
+          {
+            month: newMonth,
+            amount: price,
+            paid: false,
+            paymentDate: dueDate,
+            notes: additionalNotes,
+            partial,
+          },
+          { headers: { 'auth-token': localStorage.getItem('token') } },
+        );
+
+        notify.show('Pago actualizado correctamente.', 'success');
+        props.refresh();
+        props.onHide();
         return;
       }
 
@@ -86,7 +120,7 @@ const AddEditForm = (props) => {
         const confirmar = window.confirm(
           `El monto cubre ${mesesPagados} mes(es) completo(s)` +
             (resto > 0 ? ` y un pago parcial de $${resto}` : '') +
-            `. ¿Desea registrar los meses adelantados?`
+            `. ¿Desea registrar los meses adelantados?`,
         );
         if (!confirmar) return;
       }
@@ -194,7 +228,7 @@ const AddEditForm = (props) => {
                 },
               }),
           },
-          { headers: { 'auth-token': localStorage.getItem('token') } }
+          { headers: { 'auth-token': localStorage.getItem('token') } },
         );
 
         await Axios.post(
@@ -212,7 +246,7 @@ const AddEditForm = (props) => {
             additionalNotes: pago.notes,
             partial: pago.partial,
           },
-          { headers: { 'auth-token': localStorage.getItem('token') } }
+          { headers: { 'auth-token': localStorage.getItem('token') } },
         );
       }
 

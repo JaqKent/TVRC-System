@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 import jsPDF from 'jspdf';
@@ -43,7 +44,7 @@ function BatchPrinting() {
       try {
         const out = await axios.get(
           `${process.env.REACT_APP_BACKEND_URL}/api/players/get`,
-          HEADERSCONFIG
+          HEADERSCONFIG,
         );
 
         if (isMounted) {
@@ -133,7 +134,7 @@ function BatchPrinting() {
               doc.text(
                 `Abono mes: ${moment().format('MMMM [del año] YYYY')}`,
                 75,
-                120
+                120,
               );
 
               //
@@ -171,7 +172,7 @@ function BatchPrinting() {
               doc.text(
                 'Enviar comprobante de pago:WhatsApp:3816783493',
                 5,
-                240
+                240,
               );
 
               doc.save(`Nombre-${players.name}.pdf`);

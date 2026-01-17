@@ -28,6 +28,7 @@ const DetailPlayers = (props) => {
   const [deleteConfirmationShow, setDeleteConfirmationShow] = useState(false);
   const [askToPrintModalShow, setAskToPrintModalShow] = useState(false);
   const [idToPrint, setIdToPrint] = useState('');
+  const [selectedPayment, setSelectedPayment] = useState(null);
 
   useEffect(() => {
     getPlayerInfo();
@@ -38,14 +39,14 @@ const DetailPlayers = (props) => {
       `${process.env.REACT_APP_BACKEND_URL}/api/players/get/${id}`,
       {
         headers: { 'auth-token': localStorage.getItem('token') },
-      }
+      },
     );
 
     const allPlayersReq = Axios.get(
       `${process.env.REACT_APP_BACKEND_URL}/api/players/get/`,
       {
         headers: { 'auth-token': localStorage.getItem('token') },
-      }
+      },
     );
 
     Axios.all([singlePlayer, allPlayersReq])
@@ -54,7 +55,7 @@ const DetailPlayers = (props) => {
           setData(singlePlayerRes.data.data[0]);
           setAllPlayers(allPlayersRes.data);
           setIsLoading(false);
-        })
+        }),
       )
       .catch((err) => notify.show(err.message, 'error', 3000, 'red'));
   };
@@ -62,6 +63,29 @@ const DetailPlayers = (props) => {
   const askToPrint = (id) => {
     setAskToPrintModalShow(!askToPrintModalShow);
     setIdToPrint(id || '');
+  };
+
+  const handleEditPayment = (payment) => {
+    setSelectedPayment(payment);
+    setShowBills(true);
+  };
+
+  const handleDeletePayment = async (payment) => {
+    const confirmar = window.confirm(
+      `¿Seguro que deseas eliminar el pago del mes ${payment.month}?`,
+    );
+    if (!confirmar) return;
+
+    try {
+      await Axios.delete(
+        `${process.env.REACT_APP_BACKEND_URL}/api/players/payment/${id}/${payment._id}`,
+        { headers: { 'auth-token': localStorage.getItem('token') } },
+      );
+      notify.show('Pago eliminado correctamente.', 'success');
+      getPlayerInfo();
+    } catch (err) {
+      notify.show(err.message, 'error');
+    }
   };
 
   if (isLoading) {
@@ -86,6 +110,7 @@ const DetailPlayers = (props) => {
         playerList={allPlayers}
         selectedPlayer={data}
         askToPrint={askToPrint}
+        selectedPayment={selectedPayment}
       />
 
       <AskForPrint
@@ -224,7 +249,12 @@ const DetailPlayers = (props) => {
 
       <Row className='mt-3'>
         <Col md={12} className='shadow bg-light rounded p-3'>
-          <AccountStatus player={data} onUpdate={getPlayerInfo} />
+          <AccountStatus
+            player={data}
+            onUpdate={getPlayerInfo}
+            onEditPayment={handleEditPayment}
+            onDelete={handleDeletePayment}
+          />
         </Col>
       </Row>
     </>

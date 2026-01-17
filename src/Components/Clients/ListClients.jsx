@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ListGroup, Row, Col, Button } from 'react-bootstrap';
@@ -17,7 +18,7 @@ import Papa from 'papaparse';
 const ListClients = () => {
   const [fullClientsList, setFullClientsList] = useState([]);
   const [afterPaginationClientsList, setAfterPaginationClientsList] = useState(
-    []
+    [],
   );
   const [activeClients, setActiveClients] = useState(0);
   const [addClientsModalShow, setAddClientsModalShow] = useState(false);
@@ -38,7 +39,7 @@ const ListClients = () => {
         setFullClientsList(data);
         setAfterPaginationClientsList(data);
         setActiveClients(
-          data.filter((i) => !Boolean(i.unSubscribingDate)).length
+          data.filter((i) => !Boolean(i.unSubscribingDate)).length,
         );
         setIsLoading(false);
       })
@@ -76,7 +77,7 @@ const ListClients = () => {
         'Tipo de Sangre': rest.bloodType,
         'Talla de Camiseta': rest.tshirtSize,
         'Talla de Pantalon': rest.shortSize,
-      })
+      }),
     );
 
     const csv = Papa.unparse(formattedData, {

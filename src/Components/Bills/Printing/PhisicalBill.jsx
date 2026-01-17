@@ -27,7 +27,6 @@ const PhysicalBill = () => {
     isLoading,
     data,
     clientData,
-    email,
     displayConfirmationEmail,
   } = state;
 
@@ -49,7 +48,7 @@ const PhysicalBill = () => {
 
         const billResponse = await Axios.get(
           `${process.env.REACT_APP_BACKEND_URL}/api/playerBills/get/${id}`,
-          HEADERSCONFIG
+          HEADERSCONFIG,
         );
 
         if (billResponse.data.success) {
@@ -57,7 +56,7 @@ const PhysicalBill = () => {
 
           const clientResponse = await Axios.get(
             `${process.env.REACT_APP_BACKEND_URL}/api/players/get/${billResponse.data.data[0].playerId}`,
-            HEADERSCONFIG
+            HEADERSCONFIG,
           );
 
           if (clientResponse.data.success) {
@@ -124,7 +123,7 @@ const PhysicalBill = () => {
           Axios.post(
             `${process.env.REACT_APP_BACKEND_URL}/api/playerBills/send`,
             { ...POSTCONFIG, file: dataUri },
-            { headers: { 'auth-token': localStorage.getItem('token') } }
+            { headers: { 'auth-token': localStorage.getItem('token') } },
           ).then((res) => {
             setState((prev) => ({ ...prev, isSendingEmail: false }));
             if (res.data.success) {
