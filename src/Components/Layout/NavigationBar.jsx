@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Navbar, Nav } from 'react-bootstrap';
@@ -30,7 +31,7 @@ const NavigationBar = () => {
       Axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/user/getUserInfo`, {
         headers: { 'auth-token': localStorage.getItem('token') },
       }).then(({ data }) =>
-        setUserInfo((prevUserInfo) => ({ ...prevUserInfo, ...data }))
+        setUserInfo((prevUserInfo) => ({ ...prevUserInfo, ...data })),
       );
     }
   };

@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 // Componente Pagin (actualizado)
 import React, { useState, useEffect } from 'react';
 import { Pagination } from 'react-bootstrap';
@@ -28,7 +30,7 @@ function Pagin({ items, pageSize, onChangePage }) {
 
     const pages = Array.from(
       { length: endPage - startPage + 1 },
-      (_, i) => startPage + i
+      (_, i) => startPage + i,
     );
 
     setPager({

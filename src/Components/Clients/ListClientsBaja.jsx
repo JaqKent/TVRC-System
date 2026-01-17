@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -19,7 +20,7 @@ const ListClientsBaja = () => {
   const [clientList, setClientList] = useState([]);
   const [clientListCopy, setClientListCopy] = useState([]);
   const [afterPaginationClientsList, setAfterPaginationClientsList] = useState(
-    []
+    [],
   );
   const [activeClients, setActiveClients] = useState(0);
   const [addClientsModalShow, setAddClientsModalShow] = useState(false);
@@ -33,7 +34,7 @@ const ListClientsBaja = () => {
     })
       .then(({ data }) => {
         const filteredData = data.filter(
-          (element) => element.unSubscribingDate !== null
+          (element) => element.unSubscribingDate !== null,
         );
         setClientList(filteredData);
         setClientListCopy(filteredData);
@@ -55,7 +56,7 @@ const ListClientsBaja = () => {
 
   const performFilter = useCallback(() => {
     const filtered = clientListCopy.filter(
-      (client) => client.unSubscribingDate !== null
+      (client) => client.unSubscribingDate !== null,
     );
     setFilteredClients(filtered);
   }, [clientListCopy]);
@@ -87,7 +88,7 @@ const ListClientsBaja = () => {
         'Tipo de Sangre': rest.bloodType,
         'Talla de Camiseta': rest.tshirtSize,
         'Talla de Pantalon': rest.shortSize,
-      })
+      }),
     );
 
     const csv = Papa.unparse(formattedData, {
