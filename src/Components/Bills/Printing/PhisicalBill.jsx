@@ -284,14 +284,14 @@ const PhysicalBill = () => {
   </Col>
   <Col className='border v-center'>
     {data.playerId === '696ad284eb70ad0054a9e2a8' ? (
-      // Para Terceros: Extrae el texto después de 'Concepto: ' de manera segura
+     
       (() => {
         if (!data.additionalNotes) return 'Otros Conceptos';
         const partes = data.additionalNotes.split(' | Concepto: ');
         return partes.length > 1 ? partes[1] : 'Otros Conceptos';
       })()
     ) : (
-      // Para Socios: Le indicamos a moment que lea estrictamente el formato "MM/YYYY" de tu DB
+      
       data.month
         ? `Mes: ${moment(data.month, 'MM/YYYY').isValid()
             ? moment(data.month, 'MM/YYYY').format('MMMM YYYY')
