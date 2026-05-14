@@ -2,6 +2,7 @@ import React from 'react';
 import { Container } from 'react-bootstrap';
 import Notifications from 'react-notify-toast';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 import moment from 'moment';
 import 'moment/locale/es';
@@ -28,6 +29,7 @@ function App() {
 
   return (
     <>
+        <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
       <Notifications options={{ zIndex: 9000 }} />
       <Router>
         <NavigationBar token={token} />
@@ -57,6 +59,7 @@ function App() {
           </Routes>
         </Container>
       </Router>
+      </GoogleOAuthProvider>
     </>
   );
 }

@@ -7,13 +7,14 @@ import Pagination from '../Layout/Pagination';
 import LoadingScreen from '../Layout/LoadingScreen';
 import AskForPrint from './AskForPrints';
 import SearchingBox from './SearchingBox';
+import ThirdPartyModal from './ThirdPartyModal.jsx';
 
 const BillScreen = (props) => {
   const [state, setState] = useState({
     clientList: [],
     data: [],
     pagedData: [],
-    modalState: { addBill: false, askToPrint: false },
+    modalState: { addBill: false, askToPrint: false, addThirdPartyBill: false },
     idToPrint: '',
     isLoading: true,
   });
@@ -73,6 +74,16 @@ const BillScreen = (props) => {
     }));
   };
 
+  const addThirdPartyBill = () => {
+  setState((prevState) => ({
+    ...prevState,
+    modalState: {
+      ...prevState.modalState,
+      addThirdPartyBill: !prevState.modalState.addThirdPartyBill,
+    },
+  }));
+};
+
   if (state.isLoading) {
     return <LoadingScreen />;
   }
@@ -87,6 +98,14 @@ const BillScreen = (props) => {
         askToPrint={(i) => askToPrint(i)}
         selectedClient={state.selectedClient}
       />
+
+      <ThirdPartyModal
+      show={state.modalState.addThirdPartyBill}
+      onHide={addThirdPartyBill}
+      refresh={getData}
+      askToPrint={(i) => askToPrint(i)}
+    />
+
       <AskForPrint
         {...props}
         show={state.modalState.askToPrint}
@@ -111,6 +130,7 @@ const BillScreen = (props) => {
               <DataList
                 data={state.pagedData}
                 clientList={state.clientList}
+                 addThirdPartyBill={addThirdPartyBill}
                 addBill={addBill}
                 refresh={getData}
                 {...props}

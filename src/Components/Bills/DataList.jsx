@@ -73,6 +73,11 @@ const DataList = (props) => {
                 Registrar pago
               </Button>
             </Col>
+             <Col md={4}>
+        <Button className='w-100' variant='success' onClick={() => props.addThirdPartyBill()}>
+          Boleta Terceros / Eventos
+        </Button>
+      </Col>
             <Col>
               <Button
                 className='w-100'
@@ -94,47 +99,58 @@ const DataList = (props) => {
               <Col md={1} className='text-center' />
             </Row>
           </ListGroup.Item>
-          {props.data.map((i) => {
-            const player = props.clientList.filter(
-              (cl) => cl._id === i.playerId
-            )[0];
+         {props.data.map((i) => {
+  if (!i) return null;
 
-            return (
-              <ListGroup.Item
-                key={Math.random()}
-                variant={i.partial ? 'info' : 'light'}
-              >
-                <Row>
-                  <Col className='text-truncate'>{player && player.name}</Col>
-                  <Col className='text-center'>
-                    {moment(i.createdAt).format('L')}
-                  </Col>
+  const ID_TEST_USER = "696ad284eb70ad0054a9e2a8";
+  let displayName = "";
 
-                  <Col className='text-right'>${i.price}</Col>
-                  <Col md={2} className='text-right'>
-                    {moment(i.dueDate).fromNow()}
-                  </Col>
-                  <Col md={1} className='text-center'>
-                    <FontAwesomeIcon
-                      className='text-danger'
-                      style={{ cursor: 'pointer' }}
-                      onClick={() => {
-                        setDeleteModalId(i._id);
-                        setShowDeleteModal(true);
-                      }}
-                      icon={faTrash}
-                    />
-                    <FontAwesomeIcon
-                      className='text-info ml-2'
-                      style={{ cursor: 'pointer' }}
-                      onClick={() => navigate(`/bills/print/${i._id}`)}
-                      icon={faPrint}
-                    />
-                  </Col>
-                </Row>
-              </ListGroup.Item>
-            );
-          })}
+
+  if (i.playerId === ID_TEST_USER) {
+    displayName = i.name || "Tercero / Externo";
+  } else if (Array.isArray(props.clientList)) {
+    const player = props.clientList.find((cl) => cl._id === i.playerId);
+    displayName = player ? player.name : "Socio no encontrado";
+  }
+
+  return (
+    <ListGroup.Item
+      key={i._id || Math.random().toString()}
+      variant={i.partial ? 'info' : 'light'}
+    >
+      <Row>
+        <Col className='text-truncate'>{displayName}</Col>
+        <Col className='text-center'>
+          {moment(i.createdAt).format('L')}
+        </Col>
+
+        <Col className='text-right'>${i.price}</Col>
+        <Col md={2} className='text-right'>
+          {i.playerId === ID_TEST_USER ? 'Terceros' : moment(i.dueDate).fromNow()}
+        </Col>
+        <Col md={1} className='text-center'>
+          <FontAwesomeIcon
+            className='text-danger'
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              setDeleteModalId(i._id);
+              setShowDeleteModal(true);
+            }}
+            icon={faTrash}
+          />
+          <FontAwesomeIcon
+            className='text-info ml-2'
+            style={{ cursor: 'pointer' }}
+            onClick={() => navigate(`/bills/print/${i._id}`)}
+            icon={faPrint}
+          />
+        </Col>
+      </Row>
+    </ListGroup.Item>
+  );
+})}
+
+
         </ListGroup>
       </div>
     </>

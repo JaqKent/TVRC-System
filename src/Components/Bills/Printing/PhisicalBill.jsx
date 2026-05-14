@@ -40,48 +40,66 @@ const PhysicalBill = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const HEADERSCONFIG = {
-          headers: { 'auth-token': localStorage.getItem('token') },
-        };
+  const fetchData = async () => {
+    try {
+      const HEADERSCONFIG = {
+        headers: { 'auth-token': localStorage.getItem('token') },
+      };
 
-        const billResponse = await Axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/api/playerBills/get/${id}`,
-          HEADERSCONFIG,
-        );
+      const billResponse = await Axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}/api/playerBills/get/${id}`,
+        HEADERSCONFIG,
+      );
 
-        if (billResponse.data.success) {
-          setState((prev) => ({ ...prev, data: billResponse.data.data[0] }));
+      if (billResponse.data.success) {
+        const billData = billResponse.data.data[0] || billResponse.data.data;
+        setState((prev) => ({ ...prev, data: billData }));
 
+        const ID_TEST_USER = "696ad284eb70ad0054a9e2a8";
+
+        if (billData.playerId === ID_TEST_USER) {
+          setState((prev) => ({
+            ...prev,
+            clientData: {
+              name: billData.name, 
+              address: 'Público General',
+              email: '', 
+            },
+            isLoading: false,
+          }));
+        } else {
+      
           const clientResponse = await Axios.get(
-            `${process.env.REACT_APP_BACKEND_URL}/api/players/get/${billResponse.data.data[0].playerId}`,
+            `${process.env.REACT_APP_BACKEND_URL}/api/players/get/${billData.playerId}`,
             HEADERSCONFIG,
           );
 
           if (clientResponse.data.success) {
             setState((prev) => ({
               ...prev,
-              clientData: clientResponse.data.data[0],
+              clientData: clientResponse.data.data[0] || clientResponse.data.data,
               isLoading: false,
             }));
           } else {
             notify.show(clientResponse.data.message, 'error');
             navigate('/');
           }
-        } else {
-          notify.show(billResponse.data.message, 'error');
-          navigate('/');
         }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        notify.show('Error fetching data', 'error');
+      } else {
+        notify.show(billResponse.data.message, 'error');
         navigate('/');
       }
-    };
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      notify.show('Error fetching data', 'error');
+      navigate('/');
+    }
+  };
 
-    fetchData();
-  }, [id, navigate]);
+  fetchData();
+}, [id, navigate]);
+
+
 
   const handleSavePDF = () => {
     const PDFCONFIG = {
@@ -258,16 +276,31 @@ const PhysicalBill = () => {
                 {data.partial ? ' Pago Parcial' : ''}
               </Col>
             </Row>
-            <Row>
-              <Col md='4' className='border v-center'>
-                <p className='lead m-0 py-2'>Como:</p>
-              </Col>
-              <Col className='border v-center'>
-                {data.month
-                  ? `Mes: ${moment(data.month).format('MMMM YYYY')}`
-                  : `Año : ${data.year}`}
-              </Col>
-            </Row>
+           <Row>
+  <Col md='4' className='border v-center'>
+    <p className='lead m-0 py-2'>
+      {data.playerId === '696ad284eb70ad0054a9e2a8' ? 'Concepto:' : 'Como:'}
+    </p>
+  </Col>
+  <Col className='border v-center'>
+    {data.playerId === '696ad284eb70ad0054a9e2a8' ? (
+      // Para Terceros: Extrae el texto después de 'Concepto: ' de manera segura
+      (() => {
+        if (!data.additionalNotes) return 'Otros Conceptos';
+        const partes = data.additionalNotes.split(' | Concepto: ');
+        return partes.length > 1 ? partes[1] : 'Otros Conceptos';
+      })()
+    ) : (
+      // Para Socios: Le indicamos a moment que lea estrictamente el formato "MM/YYYY" de tu DB
+      data.month
+        ? `Mes: ${moment(data.month, 'MM/YYYY').isValid()
+            ? moment(data.month, 'MM/YYYY').format('MMMM YYYY')
+            : data.month}`
+        : `Año : ${data.year || ''}`
+    )}
+  </Col>
+</Row>
+
             <Row className='border v-center'>
               <Col md='8'>
                 <Row>
