@@ -1,22 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useState, useEffect } from "react";
+import { Row, Col, Button } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTrash,
   faUserEdit,
   faFileInvoice,
-} from '@fortawesome/free-solid-svg-icons';
-import Axios from 'axios';
-import moment from 'moment';
-import { notify } from 'react-notify-toast';
-import LoadingScreen from '../Layout/LoadingScreen';
-import ModifyClientDetails from './ModifyClientDetail';
-import AddEditForm from '../Bills/AddEditForm';
-import DeleteConfirmation from './DeleteConfirmation';
-import AskForPrint from '../Bills/AskForPrints';
-import { useNavigate, useParams } from 'react-router-dom';
-import AccountStatus from '../AccountStatus/AccountStatus';
+  faQrcode,
+} from "@fortawesome/free-solid-svg-icons";
+import Axios from "axios";
+import moment from "moment";
+import { notify } from "react-notify-toast";
+import LoadingScreen from "../Layout/LoadingScreen";
+import ModifyClientDetails from "./ModifyClientDetail";
+import AddEditForm from "../Bills/AddEditForm";
+import DeleteConfirmation from "./DeleteConfirmation";
+import AskForPrint from "../Bills/AskForPrints";
+import { useNavigate, useParams } from "react-router-dom";
+import AccountStatus from "../AccountStatus/AccountStatus";
+import { SocioCardModal } from "./SocioCardModal";
 
 const DetailPlayers = (props) => {
   const { id } = useParams();
@@ -28,8 +30,9 @@ const DetailPlayers = (props) => {
   const [showBills, setShowBills] = useState(false);
   const [deleteConfirmationShow, setDeleteConfirmationShow] = useState(false);
   const [askToPrintModalShow, setAskToPrintModalShow] = useState(false);
-  const [idToPrint, setIdToPrint] = useState('');
+  const [idToPrint, setIdToPrint] = useState("");
   const [selectedPayment, setSelectedPayment] = useState(null);
+  const [qrModalShow, setQrModalShow] = useState(false);
 
   useEffect(() => {
     getPlayerInfo();
@@ -39,14 +42,14 @@ const DetailPlayers = (props) => {
     const singlePlayer = Axios.get(
       `${process.env.REACT_APP_BACKEND_URL}/api/players/get/${id}`,
       {
-        headers: { 'auth-token': localStorage.getItem('token') },
+        headers: { "auth-token": localStorage.getItem("token") },
       },
     );
 
     const allPlayersReq = Axios.get(
       `${process.env.REACT_APP_BACKEND_URL}/api/players/get/`,
       {
-        headers: { 'auth-token': localStorage.getItem('token') },
+        headers: { "auth-token": localStorage.getItem("token") },
       },
     );
 
@@ -58,12 +61,12 @@ const DetailPlayers = (props) => {
           setIsLoading(false);
         }),
       )
-      .catch((err) => notify.show(err.message, 'error', 3000, 'red'));
+      .catch((err) => notify.show(err.message, "error", 3000, "red"));
   };
 
   const askToPrint = (id) => {
     setAskToPrintModalShow(!askToPrintModalShow);
-    setIdToPrint(id || '');
+    setIdToPrint(id || "");
   };
 
   const handleEditPayment = (payment) => {
@@ -80,12 +83,12 @@ const DetailPlayers = (props) => {
     try {
       await Axios.delete(
         `${process.env.REACT_APP_BACKEND_URL}/api/players/payment/${id}/${payment._id}`,
-        { headers: { 'auth-token': localStorage.getItem('token') } },
+        { headers: { "auth-token": localStorage.getItem("token") } },
       );
-      notify.show('Pago eliminado correctamente.', 'success');
+      notify.show("Pago eliminado correctamente.", "success");
       getPlayerInfo();
     } catch (err) {
-      notify.show(err.message, 'error');
+      notify.show(err.message, "error");
     }
   };
 
@@ -98,7 +101,7 @@ const DetailPlayers = (props) => {
       <DeleteConfirmation
         id={id}
         goHome={() => {
-          navigate('/');
+          navigate("/");
         }}
         show={deleteConfirmationShow}
         onHide={() => setDeleteConfirmationShow(!deleteConfirmationShow)}
@@ -117,7 +120,7 @@ const DetailPlayers = (props) => {
       <AskForPrint
         {...props}
         show={askToPrintModalShow}
-        onHide={() => askToPrint('')}
+        onHide={() => askToPrint("")}
         id={idToPrint}
       />
 
@@ -125,122 +128,134 @@ const DetailPlayers = (props) => {
         isEdit={true}
         playerToEdit={data}
         refresh={getPlayerInfo}
-        notify={(message, type) => notify.show(message, type, 3000, 'blue')}
+        notify={(message, type) => notify.show(message, type, 3000, "blue")}
         onHide={() => setAddPlayersModalShow(!addPlayersModalShow)}
         show={addPlayersModalShow}
       />
 
-      <Row className='mt-3'>
-        <Col md={4} className='shadow bg-light rounded p-3'>
-          <small className='text-muted text-uppercase'>Nombre del socio:</small>
-          <h1 className='display-4 display-5'>{data.name}</h1>
-          <small className='text-danger'>
+      <SocioCardModal
+        show={qrModalShow}
+        onHide={() => setQrModalShow(false)}
+        socio={data}
+      />
+
+      <Row className="mt-3">
+        <Col md={4} className="shadow bg-light rounded p-3">
+          <small className="text-muted text-uppercase">Nombre del socio:</small>
+          <h1 className="display-4 display-5">{data.name}</h1>
+          <small className="text-danger">
             <strong>
-              {data.unSubscribingDate ? 'Socio dado de baja' : ''}
+              {data.unSubscribingDate ? "Socio dado de baja" : ""}
             </strong>
           </small>
         </Col>
-        <Col md={3} />
-        <Col
-          className='shadow bg-light rounded p-3 text-center d-flex justify-content-center my-auto'
-          style={{ height: 70 }}
-        >
+        <Col md={2} />
+        <Col className="shadow bg-light rounded p-3 text-center d-flex justify-content-center my-auto flex-wrap gap-2">
+          <Button
+            onClick={() => setQrModalShow(true)}
+            size="sm"
+            variant="success"
+            className="mr-2"
+          >
+            <FontAwesomeIcon icon={faQrcode} className="mr-2" />
+            Ver Credencial QR
+          </Button>
           <Button
             onClick={() => setAddPlayersModalShow(!addPlayersModalShow)}
-            size='sm'
-            className='mr-2'
+            size="sm"
+            className="mr-2"
           >
-            <FontAwesomeIcon icon={faFileInvoice} className='mr-2' />
+            <FontAwesomeIcon icon={faFileInvoice} className="mr-2" />
             Editar socio
           </Button>
           <Button
             onClick={() => setShowBills(!showBills)}
-            size='sm'
-            className='mr-2'
+            size="sm"
+            className="mr-2"
           >
-            <FontAwesomeIcon icon={faUserEdit} className='mr-2' />
+            <FontAwesomeIcon icon={faUserEdit} className="mr-2" />
             Generar pago
           </Button>
           <Button
-            size='sm'
+            size="sm"
             onClick={() => setDeleteConfirmationShow(!deleteConfirmationShow)}
-            variant='danger'
+            variant="danger"
           >
-            <FontAwesomeIcon icon={faTrash} className='mr-2' />
+            <FontAwesomeIcon icon={faTrash} className="mr-2" />
             Eliminar socio
           </Button>
         </Col>
       </Row>
 
-      <Row className='mt-3'>
-        <Col md={4} className='shadow bg-light rounded p-3'>
-          <small className='text-muted text-uppercase text-weigth-bold'>
+      <Row className="mt-3">
+        <Col md={4} className="shadow bg-light rounded p-3">
+          <small className="text-muted text-uppercase text-weigth-bold">
             Datos principales:
           </small>
-          <ul className='mt-3'>
+          <ul className="mt-3">
             <li>
-              <span className='text-muted'>F. de Nacimiento:</span>{' '}
-              {data.birthday ? moment(data.birthday).format('L') : ''}
+              <span className="text-muted">F. de Nacimiento:</span>{" "}
+              {data.birthday ? moment(data.birthday).format("L") : ""}
             </li>
             <li>
-              <span className='text-muted'>Dirección:</span> {data.address}
+              <span className="text-muted">Dirección:</span> {data.address}
             </li>
             <li>
-              <span className='text-muted'>Teléfono:</span> {data.phone} /{' '}
-              {data.phoneAlt ? data.phoneAlt : ''}
+              <span className="text-muted">Teléfono:</span> {data.phone} /{" "}
+              {data.phoneAlt ? data.phoneAlt : ""}
             </li>
             <li>
-              <span className='text-muted'>Categoría:</span> {data.category}
+              <span className="text-muted">Categoría:</span> {data.category}
             </li>
             <li>
-              <span className='text-muted'>DNI:</span> {data.dni}
+              <span className="text-muted">DNI:</span> {data.dni}
             </li>
           </ul>
         </Col>
 
-        <Col className='shadow bg-light rounded p-3 ml-3 '>
-          <small className='text-muted text-uppercase text-weigth-bold'>
+        <Col className="shadow bg-light rounded p-3 ml-3 ">
+          <small className="text-muted text-uppercase text-weigth-bold">
             Datos adicionales:
           </small>
-          <ul className='mt-3'>
+          <ul className="mt-3">
             <li>
-              <span className='text-muted'>Fecha de alta:</span>{' '}
-              {moment(data.inscriptionDate).format('L')}
+              <span className="text-muted">Fecha de alta:</span>{" "}
+              {moment(data.inscriptionDate).format("L")}
             </li>
             <li>
-              <span className='text-muted'>Precio:</span> ${data.price}
+              <span className="text-muted">Precio:</span> ${data.price}
             </li>
             <li>
-              <span className='text-muted'>Obra Social:</span> {data.obraSocial}
+              <span className="text-muted">Obra Social:</span> {data.obraSocial}
             </li>
             <li>
-              <span className='text-muted'>Grupo Sanguíneo:</span>{' '}
+              <span className="text-muted">Grupo Sanguíneo:</span>{" "}
               {data.bloodType}
             </li>
             <li>
-              <span className='text-muted'>Talle Camiseta:</span>{' '}
+              <span className="text-muted">Talle Camiseta:</span>{" "}
               {data.tshirtSize}
             </li>
             <li>
-              <span className='text-muted'>Talle Pantalón:</span>{' '}
+              <span className="text-muted">Talle Pantalón:</span>{" "}
               {data.shortSize}
             </li>
             <li>
-              <span className='text-muted'>Apodo:</span> {data.nickName}
+              <span className="text-muted">Apodo:</span> {data.nickName}
             </li>
           </ul>
 
-          <div className={data.unSubscribingDate ? 'd-block' : 'd-none'}>
-            <small className='text-muted text-uppercase text-weigth-bold'>
+          <div className={data.unSubscribingDate ? "d-block" : "d-none"}>
+            <small className="text-muted text-uppercase text-weigth-bold">
               Datos de baja:
             </small>
-            <ul className='mt-3'>
+            <ul className="mt-3">
               <li>
-                <span className='text-muted'>Fecha de baja:</span>{' '}
-                {moment(data.unSubscribingDate).format('L')}
+                <span className="text-muted">Fecha de baja:</span>{" "}
+                {moment(data.unSubscribingDate).format("L")}
               </li>
               <li>
-                <span className='text-muted'>Motivo de baja:</span>{' '}
+                <span className="text-muted">Motivo de baja:</span>{" "}
                 {data.unSubscribingReason}
               </li>
             </ul>
@@ -248,8 +263,8 @@ const DetailPlayers = (props) => {
         </Col>
       </Row>
 
-      <Row className='mt-3'>
-        <Col md={12} className='shadow bg-light rounded p-3'>
+      <Row className="mt-3">
+        <Col md={12} className="shadow bg-light rounded p-3">
           <AccountStatus
             player={data}
             onUpdate={getPlayerInfo}
